@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 /* Custom scrollbar styles for dark mode */
-/* 自定义滚动条样式 */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -31,13 +30,11 @@
 }
 
 /* Smooth transitions */
-/* 平滑过渡效果 */
 * {
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 /* Element Plus dark mode overrides */
-/* Element Plus 深色模式覆盖 */
 .dark {
   --el-bg-color: #1f2937;
   --el-bg-color-page: #111827;
@@ -56,7 +53,6 @@
 }
 
 /* Card hover effect */
-/* 卡片悬停效果 */
 .hover-card {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -72,7 +68,6 @@
 
 
 /* Loading animation */
-/* 加载动画 */
 @keyframes pulse-slow {
   0%, 100% {
     opacity: 1;
@@ -87,7 +82,6 @@
 }
 
 /* Typing animation */
-/* 打字动画 */
 @keyframes typing {
   from {
     width: 0;
@@ -104,7 +98,6 @@
 }
 
 /* Naive UI textarea global styles */
-/* Naive UI 文本域全局样式 */
 .novel-textarea .n-input {
   @apply bg-gray-50 dark:bg-[#18181c] rounded-xl;
 }

@@ -14,10 +14,10 @@ const theme = computed(() => settings.isDark ? darkTheme : null)
     <n-message-provider>
       <n-dialog-provider>
         <div class="min-h-screen bg-gray-50 dark:bg-[#18181c] transition-colors">
-          <!-- Header - 顶部导航栏 -->
+          <!-- Header -->
           <AppHeader />
           
-          <!-- Main content - 主内容区 -->
+          <!-- Main content -->
           <main class="max-w-6xl mx-auto px-6 py-8">
             <router-view />
           </main>
@@ -28,7 +28,7 @@ const theme = computed(() => settings.isDark ? darkTheme : null)
 </template>
 
 <style>
-/* Global styles - 全局样式 */
+/* Global styles */
 html {
   scroll-behavior: smooth;
 }

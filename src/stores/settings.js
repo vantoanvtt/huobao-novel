@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
 import { ref, watch, computed } from 'vue'
 
-// Default model config - 默认模型配置
+// Default model config
 const DEFAULT_MODEL = 'gemini-3-flash-preview'
 
-// Settings store - 设置状态管理
+// Settings store
 export const useSettingsStore = defineStore('settings', () => {
   // State
   const isDark = ref(localStorage.getItem('theme') === 'dark' || 

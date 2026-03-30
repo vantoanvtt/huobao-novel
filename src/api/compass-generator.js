@@ -5,10 +5,10 @@ import { parseJsonResponse, applyDelta, getSnapshotForChapter } from '../utils/g
 const { extractGraph: extractGraphPrompt, extractChapterDelta: extractChapterDeltaPrompt, auditGraph: auditGraphPrompt, extractChapterGraph: extractChapterGraphPrompt } = compassPrompts
 
 /**
- * 从架构数据生成基线图谱
+ * Generate baseline graph from architecture data
  */
 export async function generateBaseGraph(project, apiConfig, onProgress) {
-  onProgress('正在分析小说架构，提取实体关系...', 1, 3)
+  onProgress('Analyzing novel architecture, extracting entity relationships...', 1, 3)
 
   const prompt = extractGraphPrompt({
     characterDynamics: project.characterDynamics,
@@ -21,22 +21,22 @@ export async function generateBaseGraph(project, apiConfig, onProgress) {
   const parsed = parseJsonResponse(response)
 
   if (!parsed || !parsed.nodes) {
-    throw new Error('图谱提取失败：AI 返回的数据格式不正确')
+    throw new Error('Graph extraction failed: AI returned incorrect data format')
   }
 
-  // 确保每个 edge 有 id
+  // Ensure every edge has an id
   parsed.edges = (parsed.edges || []).map((e, i) => ({
     ...e,
     id: e.id || `edge_${e.source}_${e.target}_${i}`
   }))
 
-  // 确保每个 node 有 firstAppearance
+  // Ensure every node has firstAppearance
   parsed.nodes = parsed.nodes.map(n => ({
     ...n,
     firstAppearance: n.firstAppearance ?? 0
   }))
 
-  onProgress('基线图谱生成完成', 3, 3)
+  onProgress('Baseline graph generation complete', 3, 3)
 
   return {
     version: 1,
@@ -48,7 +48,7 @@ export async function generateBaseGraph(project, apiConfig, onProgress) {
 }
 
 /**
- * 从已写章节批量生成快照
+ * Generate snapshots in batch from written chapters
  */
 export async function generateChapterSnapshots(project, apiConfig, onProgress) {
   const graphData = { ...project.graphData }
@@ -56,10 +56,10 @@ export async function generateChapterSnapshots(project, apiConfig, onProgress) {
 
   if (chapterNums.length === 0) return graphData
   if (!graphData.snapshots['0']) {
-    throw new Error('请先生成基线图谱')
+    throw new Error('Please generate baseline graph first')
   }
 
-  // 找出还没有快照的章节
+  // Find chapters without snapshots
   const existingSnapshots = new Set(Object.keys(graphData.snapshots).map(Number))
   const pendingChapters = chapterNums.filter(n => !existingSnapshots.has(n))
 
@@ -67,7 +67,7 @@ export async function generateChapterSnapshots(project, apiConfig, onProgress) {
 
   for (let i = 0; i < pendingChapters.length; i++) {
     const chapterNum = pendingChapters[i]
-    onProgress(`正在分析第 ${chapterNum} 章关系变化...`, i + 1, pendingChapters.length)
+    onProgress(`Analyzing relationship changes in Chapter ${chapterNum}...`, i + 1, pendingChapters.length)
 
     const currentSnapshot = getSnapshotForChapter(graphData.snapshots, chapterNum - 1)
     if (!currentSnapshot) continue
@@ -92,7 +92,7 @@ export async function generateChapterSnapshots(project, apiConfig, onProgress) {
         }
       }
     } catch (err) {
-      console.warn(`第 ${chapterNum} 章图谱分析失败:`, err.message)
+      console.warn(`Graph analysis failed for Chapter ${chapterNum}:`, err.message)
     }
   }
 
@@ -101,32 +101,32 @@ export async function generateChapterSnapshots(project, apiConfig, onProgress) {
 }
 
 /**
- * 逻辑审计
+ * Logic audit
  */
 export async function auditCompassGraph(project, apiConfig, onProgress) {
   const graphData = project.graphData
   if (!graphData?.graphGenerated) {
-    throw new Error('请先生成图谱')
+    throw new Error('Please generate graph first')
   }
 
-  onProgress('正在进行逻辑审计...', 1, 2)
+  onProgress('Performing logic audit...', 1, 2)
 
-  // 构建快照序列文本
+  // Build snapshot sequence text
   const snapshotKeys = Object.keys(graphData.snapshots).map(Number).sort((a, b) => a - b)
   const snapshotsText = snapshotKeys.map(k => {
     const s = graphData.snapshots[String(k)]
-    return `--- 第 ${k} 章快照 ---\n节点: ${s.nodes.map(n => `${n.label}(${n.status})`).join(', ')}\n关系: ${s.edges.map(e => `${e.source}-[${e.relationType}]-${e.target}`).join(', ')}`
+    return `--- Chapter ${k} Snapshot ---\nNodes: ${s.nodes.map(n => `${n.label}(${n.status})`).join(', ')}\nRelationships: ${s.edges.map(e => `${e.source}-[${e.relationType}]-${e.target}`).join(', ')}`
   }).join('\n\n')
 
   const prompt = auditGraphPrompt({
-    chapterBlueprint: project.chapterBlueprint || '(暂无大纲)',
+    chapterBlueprint: project.chapterBlueprint || '(No outline yet)',
     snapshotsText
   })
 
   const response = cleanResponse(await chatCompletion(apiConfig, prompt))
   const parsed = parseJsonResponse(response)
 
-  onProgress('逻辑审计完成', 2, 2)
+  onProgress('Logic audit complete', 2, 2)
 
   return {
     inconsistencies: parsed?.inconsistencies || [],
@@ -135,10 +135,10 @@ export async function auditCompassGraph(project, apiConfig, onProgress) {
 }
 
 /**
- * 从单章内容生成独立的关系图谱
+ * Generate independent relationship graph from a single chapter
  */
 export async function generateChapterGraph(project, chapterNum, chapterText, apiConfig, onProgress) {
-  onProgress('正在提取本章人物关系...')
+  onProgress('Extracting character relationships in this chapter...')
 
   const prompt = extractChapterGraphPrompt({
     chapterNumber: chapterNum,
@@ -150,10 +150,10 @@ export async function generateChapterGraph(project, chapterNum, chapterText, api
   const parsed = parseJsonResponse(response)
 
   if (!parsed || !parsed.nodes) {
-    throw new Error('本章关系提取失败：AI 返回的数据格式不正确')
+    throw new Error('Chapter relationship extraction failed: AI returned incorrect data format')
   }
 
-  // 确保 edge 有 id
+  // Ensure edge has id
   parsed.edges = (parsed.edges || []).map((e, i) => ({
     ...e,
     id: e.id || `edge_${e.source}_${e.target}_${i}`

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
-// Novel project store - 小说项目状态管理
+// Novel project store
 export const useNovelStore = defineStore('novel', () => {
   // State
   const projects = ref(JSON.parse(localStorage.getItem('novel_projects') || '[]'))
@@ -14,26 +14,26 @@ export const useNovelStore = defineStore('novel', () => {
   const hasProjects = computed(() => projects.value.length > 0)
 
   // Actions
-  // Create a new novel project - 创建新小说项目
+  // Create a new novel project
   function createProject(projectData) {
     const newProject = {
       id: Date.now().toString(),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       ...projectData,
-      // Architecture data - 架构数据
+      // Architecture data
       coreSeed: '',
       characterDynamics: '',
       worldBuilding: '',
       plotArchitecture: '',
       characterState: '',
-      // Chapter blueprint - 章节大纲
+      // Chapter blueprint
       chapterBlueprint: '',
-      // Chapters content (key: chapter number, value: chapter text) - 章节内容
+      // Chapters content (key: chapter number, value: chapter text)
       chapters: {},
-      // Global summary - 前文摘要
+      // Global summary
       globalSummary: '',
-      // Graph data - 关系图谱数据
+      // Graph data
       graphData: {
         version: 1,
         generatedAt: null,
@@ -41,9 +41,9 @@ export const useNovelStore = defineStore('novel', () => {
         audit: { inconsistencies: [], lastAuditAt: null },
         graphGenerated: false
       },
-      // Chapter graphs - 每章独立的关系图谱 { [chapterNum]: { nodes, edges } }
+      // Chapter graphs - { [chapterNum]: { nodes, edges } }
       chapterGraphs: {},
-      // Generation status - 生成状态
+      // Generation status
       architectureGenerated: false,
       blueprintGenerated: false
     }
@@ -52,7 +52,7 @@ export const useNovelStore = defineStore('novel', () => {
     return newProject
   }
 
-  // Update project - 更新项目
+  // Update project
   function updateProject(id, updates) {
     const index = projects.value.findIndex(p => p.id === id)
     if (index !== -1) {
@@ -68,7 +68,7 @@ export const useNovelStore = defineStore('novel', () => {
     }
   }
 
-  // Delete project - 删除项目
+  // Delete project
   function deleteProject(id) {
     const index = projects.value.findIndex(p => p.id === id)
     if (index !== -1) {
@@ -80,17 +80,17 @@ export const useNovelStore = defineStore('novel', () => {
     }
   }
 
-  // Set current project - 设置当前项目
+  // Set current project
   function setCurrentProject(id) {
     currentProject.value = projects.value.find(p => p.id === id) || null
   }
 
-  // Save to localStorage - 保存到本地存储
+  // Save to localStorage
   function saveToStorage() {
     localStorage.setItem('novel_projects', JSON.stringify(projects.value))
   }
 
-  // Set generation state - 设置生成状态
+  // Set generation state
   function setGenerating(value, progress = '') {
     isGenerating.value = value
     generationProgress.value = progress

@@ -1,8 +1,8 @@
 /**
- * Graph Helpers - 图谱工具函数
+ * Graph Helpers - Graph utility functions
  */
 
-// 关系类型 → 颜色映射
+// Relationship type → Color mapping
 export const RELATION_COLORS = {
   hostile: '#ef4444',
   romantic: '#ec4899',
@@ -12,17 +12,17 @@ export const RELATION_COLORS = {
   mentor: '#22c55e'
 }
 
-// 关系类型 → 中文标签
+// Relationship type → English labels
 export const RELATION_LABELS = {
-  hostile: '敌对',
-  romantic: '情感',
-  alliance: '同盟',
-  neutral: '中立',
-  family: '亲属',
-  mentor: '师徒'
+  hostile: 'Hostile',
+  romantic: 'Romantic',
+  alliance: 'Alliance',
+  neutral: 'Neutral',
+  family: 'Family',
+  mentor: 'Mentor'
 }
 
-// 实体类型 → ECharts symbol 映射
+// Entity type → ECharts symbol mapping
 export const NODE_SHAPES = {
   character: 'circle',
   faction: 'diamond',
@@ -30,22 +30,22 @@ export const NODE_SHAPES = {
   item: 'triangle'
 }
 
-// 实体类型 → 中文标签
+// Entity type → English labels
 export const NODE_TYPE_LABELS = {
-  character: '角色',
-  faction: '阵营',
-  location: '地点',
-  item: '道具'
+  character: 'Character',
+  faction: 'Faction',
+  location: 'Location',
+  item: 'Item'
 }
 
-// 阵营 → 颜色（动态分配）
+// Faction → Color (dynamically allocated)
 const FACTION_PALETTE = [
   '#6366f1', '#8b5cf6', '#06b6d4', '#14b8a6',
   '#f97316', '#ef4444', '#ec4899', '#84cc16'
 ]
 
 /**
- * 为阵营分配颜色
+ * Assign color to faction
  */
 export function getFactionColorMap(nodes) {
   const factions = [...new Set(nodes.filter(n => n.faction).map(n => n.faction))]
@@ -57,8 +57,8 @@ export function getFactionColorMap(nodes) {
 }
 
 /**
- * 获取指定章节的最近快照
- * 从 snapshots 中找到 <= chapterNum 的最大 key
+ * Get the latest snapshot for a specified chapter
+ * Find the maximum key from snapshots where key <= chapterNum
  */
 export function getSnapshotForChapter(snapshots, chapterNum) {
   if (!snapshots || Object.keys(snapshots).length === 0) return null
@@ -72,7 +72,7 @@ export function getSnapshotForChapter(snapshots, chapterNum) {
 }
 
 /**
- * 获取所有有快照的章节号列表
+ * Get list of all chapter numbers that have snapshots
  */
 export function getSnapshotChapters(snapshots) {
   if (!snapshots) return []
@@ -80,7 +80,7 @@ export function getSnapshotChapters(snapshots) {
 }
 
 /**
- * 将快照/图谱数据转换为 ECharts graph series 所需格式
+ * Convert snapshot/graph data to ECharts graph series format
  */
 export function toEChartsGraphData(snapshot, isDark = false, factionColorMap = {}) {
   if (!snapshot) return { nodes: [], links: [], categories: [] }
@@ -94,10 +94,10 @@ export function toEChartsGraphData(snapshot, isDark = false, factionColorMap = {
     name,
     itemStyle: { color: factionColorMap[name] || '#6366f1' }
   }))
-  // 无阵营的归入"其他"
-  categories.push({ name: '其他', itemStyle: { color: isDark ? '#a78bfa' : '#6366f1' } })
+  // Nodes without faction are grouped as "Other"
+  categories.push({ name: 'Other', itemStyle: { color: isDark ? '#a78bfa' : '#6366f1' } })
 
-  // ECharts symbol 映射
+  // ECharts symbol mapping
   const ECHARTS_SYMBOLS = {
     character: 'circle',
     faction: 'diamond',
@@ -143,20 +143,20 @@ export function toEChartsGraphData(snapshot, isDark = false, factionColorMap = {
 }
 
 /**
- * 将 delta 应用到快照上，生成新快照
+ * Apply delta to snapshot to generate new snapshot
  */
 export function applyDelta(snapshot, delta) {
   const nodes = [...snapshot.nodes]
   const edges = [...snapshot.edges]
 
-  // 新增节点
+  // Add new nodes
   if (delta.newNodes) {
     for (const n of delta.newNodes) {
       if (!nodes.find(x => x.id === n.id)) nodes.push(n)
     }
   }
 
-  // 更新节点
+  // Update nodes
   if (delta.updatedNodes) {
     for (const u of delta.updatedNodes) {
       const idx = nodes.findIndex(x => x.id === u.id)
@@ -164,7 +164,7 @@ export function applyDelta(snapshot, delta) {
     }
   }
 
-  // 删除节点
+  // Delete nodes
   if (delta.removedNodeIds) {
     for (const id of delta.removedNodeIds) {
       const idx = nodes.findIndex(x => x.id === id)
@@ -172,14 +172,14 @@ export function applyDelta(snapshot, delta) {
     }
   }
 
-  // 新增边
+  // Add new edges
   if (delta.newEdges) {
     for (const e of delta.newEdges) {
       if (!edges.find(x => x.id === e.id)) edges.push(e)
     }
   }
 
-  // 更新边
+  // Update edges
   if (delta.updatedEdges) {
     for (const u of delta.updatedEdges) {
       const idx = edges.findIndex(x => x.id === u.id)
@@ -192,7 +192,7 @@ export function applyDelta(snapshot, delta) {
     }
   }
 
-  // 删除边
+  // Delete edges
   if (delta.removedEdgeIds) {
     for (const id of delta.removedEdgeIds) {
       const idx = edges.findIndex(x => x.id === id)
@@ -204,14 +204,14 @@ export function applyDelta(snapshot, delta) {
 }
 
 /**
- * 尝试从 LLM 响应中解析 JSON
+ * Try to parse JSON from LLM response
  */
 export function parseJsonResponse(text) {
-  // 先直接尝试
+  // Try direct parsing first
   try {
     return JSON.parse(text)
   } catch {
-    // 尝试提取 JSON 块
+    // Try extracting JSON block
     const match = text.match(/\{[\s\S]*\}/)
     if (match) {
       try {
@@ -225,7 +225,7 @@ export function parseJsonResponse(text) {
 }
 
 /**
- * 生成导出用的独立 HTML
+ * Generate standalone HTML for export
  */
 export function generateExportHTML(graphData, projectTitle) {
   const snapshot = getSnapshotForChapter(graphData.snapshots, Infinity)

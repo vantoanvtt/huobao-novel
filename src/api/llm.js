@@ -1,11 +1,10 @@
 import axios from 'axios'
 
-// LLM API service - LLM API 服务
-// Handles all AI model interactions - 处理所有 AI 模型交互
+// LLM API service
+// Handles all AI model interactions
 
 /**
  * Create chat completion request
- * 创建聊天补全请求
  */
 export async function chatCompletion(config, prompt, onStream = null) {
   const { baseUrl, apiKey, model, temperature, maxTokens, timeout } = config
@@ -19,11 +18,11 @@ export async function chatCompletion(config, prompt, onStream = null) {
   }
 
   if (onStream) {
-    // Streaming response - 流式响应
+    // Streaming response
     return streamCompletion(baseUrl, apiKey, requestBody, timeout, onStream)
   }
 
-  // Non-streaming response - 非流式响应
+  // Non-streaming response
   const response = await axios.post(
     `${baseUrl}/chat/completions`,
     requestBody,
@@ -41,7 +40,6 @@ export async function chatCompletion(config, prompt, onStream = null) {
 
 /**
  * Stream completion with callback
- * 流式补全并回调
  */
 async function streamCompletion(baseUrl, apiKey, requestBody, timeout, onStream) {
   const response = await fetch(`${baseUrl}/chat/completions`, {
@@ -92,16 +90,15 @@ async function streamCompletion(baseUrl, apiKey, requestBody, timeout, onStream)
 
 /**
  * Clean AI response - remove markdown formatting
- * 清理 AI 响应 - 移除 markdown 格式
  */
 export function cleanResponse(text) {
   if (!text) return ''
   
-  // Remove markdown code blocks - 移除 markdown 代码块
+  // Remove markdown code blocks
   let cleaned = text.replace(/```[\s\S]*?```/g, '')
   cleaned = cleaned.replace(/`/g, '')
   
-  // Trim whitespace - 去除空白
+  // Trim whitespace
   cleaned = cleaned.trim()
   
   return cleaned
