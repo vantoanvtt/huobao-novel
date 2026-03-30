@@ -9,6 +9,8 @@ import axios from 'axios'
 export async function chatCompletion(config, prompt, onStream = null) {
   const { baseUrl, apiKey, model, temperature, maxTokens, timeout } = config
 
+  console.log('[chatCompletion] Prompt:', prompt)
+
   const requestBody = {
     model,
     messages: [{ role: 'user', content: prompt }],

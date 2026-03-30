@@ -1,5 +1,5 @@
 import { chatCompletion, cleanResponse } from './llm'
-import { compassPrompts } from '../prompts/compass'
+import { compassPrompts } from '../prompts/compass_eng'
 import { parseJsonResponse, applyDelta, getSnapshotForChapter } from '../utils/graph-helpers'
 
 const { extractGraph: extractGraphPrompt, extractChapterDelta: extractChapterDeltaPrompt, auditGraph: auditGraphPrompt, extractChapterGraph: extractChapterGraphPrompt } = compassPrompts

@@ -35,7 +35,7 @@ Output format (strict JSON, no explanatory text):
 {
   "nodes": [
     {
-      "id": "char_<pinyin_abbr>",
+      "id": "char_<english_name>",,
       "label": "Character Name",
       "type": "character",
       "importance": 8,
@@ -63,7 +63,7 @@ Output format (strict JSON, no explanatory text):
 Requirements:
 - importance range 1-10, protagonist 9-10, important support characters 5-7, bystanders 1-4
 - strength range 1-10, core relationships 7-10, general relationships 3-6
-- Each node's id must be unique, using type prefix + pinyin abbreviation (e.g. char_zhangsan, fac_zhengdao, loc_liuxi, item_hanjian)
+- Each node's id must be unique, using type prefix + snake case English name (e.g. char_stone_guard, fac_righteous_sect, loc_willow_creek, item_frost_sabre)
 - Output only JSON, no markdown code block markers
 `
 
@@ -161,7 +161,7 @@ Output format (strict JSON, no explanatory text):
 {
   "nodes": [
     {
-      "id": "char_<pinyin_abbr>",
+      "id": "char_<english_name>",,
       "label": "Character Name",
       "type": "character",
       "importance": 8,

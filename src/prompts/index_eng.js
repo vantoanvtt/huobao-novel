@@ -98,7 +98,7 @@ export const promptManagerEng = new PromptManagerEng()
 export default promptManagerEng
 
 
-export { architecturePrompts } from './architecture_eng'
-export { chapterPrompts } from './chapter_eng'
-export { utilityPrompts } from './utility_eng'
-export { compassPrompts } from './compass_eng'
+// export { architecturePrompts } from './architecture_eng'
+// export { chapterPrompts } from './chapter_eng'
+// export { utilityPrompts } from './utility_eng'
+// export { compassPrompts } from './compass_eng'
