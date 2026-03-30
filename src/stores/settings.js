@@ -7,9 +7,9 @@ const DEFAULT_MODEL = 'gemini-3-flash-preview'
 // Settings store
 export const useSettingsStore = defineStore('settings', () => {
   // State
-  const isDark = ref(localStorage.getItem('theme') === 'dark' || 
+  const isDark = ref(localStorage.getItem('theme') === 'dark' ||
     (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches))
-  
+
   const apiConfig = ref(JSON.parse(localStorage.getItem('api_config') || JSON.stringify({
     channel: 'chatfire',
     baseUrl: 'https://api.chatfire.site/v1',

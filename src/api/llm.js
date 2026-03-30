@@ -70,7 +70,7 @@ async function streamCompletion(baseUrl, apiKey, requestBody, timeout, onStream)
       if (line.startsWith('data: ')) {
         const data = line.slice(6)
         if (data === '[DONE]') continue
-        
+
         try {
           const parsed = JSON.parse(data)
           const content = parsed.choices?.[0]?.delta?.content || ''
@@ -93,13 +93,13 @@ async function streamCompletion(baseUrl, apiKey, requestBody, timeout, onStream)
  */
 export function cleanResponse(text) {
   if (!text) return ''
-  
+
   // Remove markdown code blocks
   let cleaned = text.replace(/```[\s\S]*?```/g, '')
   cleaned = cleaned.replace(/`/g, '')
-  
+
   // Trim whitespace
   cleaned = cleaned.trim()
-  
+
   return cleaned
 }

@@ -92,7 +92,7 @@ export async function generateArchitecture(project, apiConfig, onProgress) {
  */
 export async function generateChapterBlueprint(project, apiConfig, onProgress) {
   const { numberOfChapters, userGuidance } = project
-  
+
   // Build novel architecture text
   const novelArchitecture = `
 #=== 0) Novel Setting ===
@@ -118,7 +118,7 @@ ${project.plotArchitecture}
   chunkSize = Math.max(1, Math.min(chunkSize, numberOfChapters))
 
   let blueprint = project.chapterBlueprint || ''
-  
+
   // Parse existing chapters
   const existingChapters = blueprint.match(/Chapter\s*(\d+)|\u7b2c\s*(\d+)\s*\u7ae0/g) || []
   const maxExistingChapter = existingChapters.length > 0
@@ -159,7 +159,7 @@ ${project.plotArchitecture}
       })
 
       const chunkResult = cleanResponse(await chatCompletion(apiConfig, prompt))
-      
+
       if (chunkResult) {
         blueprint = blueprint ? `${blueprint}\n\n${chunkResult}` : chunkResult
       }
@@ -177,12 +177,12 @@ ${project.plotArchitecture}
  */
 function limitChapterBlueprint(blueprint, limit) {
   if (!blueprint) return ''
-  
+
   const pattern = /(Chapter\s+\d+.*?)(?=Chapter\s+\d+|$)/gs
   const chapters = blueprint.match(pattern) || []
-  
+
   if (chapters.length <= limit) return blueprint
-  
+
   return chapters.slice(-limit).join('\n\n').trim()
 }
 
@@ -199,11 +199,11 @@ export function parseChapterBlueprint(blueprint) {
   while ((match = pattern.exec(blueprint)) !== null) {
     const chapterNum = parseInt(match[2])
     const title = match[3].trim()
-    
+
     // Extract chapter details
     const startIndex = match.index
     const endIndex = blueprint.indexOf(`Chapter ${chapterNum + 1}`, startIndex)
-    const chapterText = endIndex > -1 
+    const chapterText = endIndex > -1
       ? blueprint.substring(startIndex, endIndex)
       : blueprint.substring(startIndex)
 
@@ -237,7 +237,7 @@ function extractField(text, fieldName) {
 export async function generateChapterDraft(project, chapterNumber, apiConfig, onProgress) {
   const chapters = parseChapterBlueprint(project.chapterBlueprint)
   const chapterInfo = chapters.find(c => c.number === chapterNumber)
-  
+
   if (!chapterInfo) {
     throw new Error(`Chapter ${chapterNumber} does not exist in the outline`)
   }
@@ -285,7 +285,7 @@ Plot Architecture: ${project.plotArchitecture}
   } else {
     // Subsequent chapters
     onProgress(`Generating draft for chapter ${chapterNumber}...`, 0, 3)
-    
+
     // Get previous chapter excerpt
     const prevChapter = project.chapters?.[chapterNumber - 1] || ''
     const previousChapterExcerpt = prevChapter.slice(-800) || '(No previous chapter content)'
@@ -327,7 +327,7 @@ Plot Architecture: ${project.plotArchitecture}
  */
 export async function finalizeChapter(project, chapterNumber, chapterText, apiConfig, onProgress) {
   onProgress('Updating previous story summary...', 1, 3)
-  
+
   // Update global summary
   const newSummary = cleanResponse(await chatCompletion(apiConfig, summaryPrompt({
     chapterText,
@@ -335,7 +335,7 @@ export async function finalizeChapter(project, chapterNumber, chapterText, apiCo
   })))
 
   onProgress('Updating character state...', 2, 3)
-  
+
   // Update character state
   const newCharacterState = cleanResponse(await chatCompletion(apiConfig, updateCharacterStatePrompt({
     chapterText,
@@ -355,7 +355,7 @@ export async function finalizeChapter(project, chapterNumber, chapterText, apiCo
  */
 export async function enrichChapter(chapterText, wordNumber, apiConfig, onProgress) {
   onProgress('Enriching chapter text...', 0, 1)
-  
+
   const enrichedText = cleanResponse(await chatCompletion(apiConfig, enrichChapterPrompt({
     chapterText,
     wordNumber
@@ -370,7 +370,7 @@ export async function enrichChapter(chapterText, wordNumber, apiConfig, onProgre
  */
 export function exportNovelToText(project) {
   const lines = []
-  
+
   // Title
   lines.push(`《${project.title}》`)
   lines.push('')
@@ -388,7 +388,7 @@ export function exportNovelToText(project) {
   for (const num of chapterNums) {
     const info = blueprintChapters.find(c => c.number === num)
     const title = info?.title || `Chapter ${num}`
-    
+
     lines.push(`Chapter ${num} ${title}`)
     lines.push('')
     lines.push(chapters[num])
@@ -405,7 +405,7 @@ export function exportNovelToText(project) {
  */
 export function exportNovelToMarkdown(project) {
   const lines = []
-  
+
   // Title
   lines.push(`# ${project.title}`)
   lines.push('')
@@ -423,7 +423,7 @@ export function exportNovelToMarkdown(project) {
   for (const num of chapterNums) {
     const info = blueprintChapters.find(c => c.number === num)
     const title = info?.title || `Chapter ${num}`
-    
+
     lines.push(`## Chapter ${num} ${title}`)
     lines.push('')
     lines.push(chapters[num])
