@@ -70,12 +70,12 @@ function loadChapter(num) {
 // Generate chapter draft - 生成章节草稿
 async function handleGenerate() {
   if (!settings.apiConfig.apiKey) {
-    message.warning('请先在设置中配置 API Key')
+    message.warning('Please configure the API Key in Settings first')
     return
   }
 
   if (!props.project?.blueprintGenerated) {
-    message.warning('请先生成章节大纲')
+    message.warning('Please generate the chapter blueprint first')
     return
   }
 
@@ -83,10 +83,10 @@ async function handleGenerate() {
   if (currentChapter.value > 1 && !props.project?.chapters?.[currentChapter.value - 1]) {
     const confirmed = await new Promise((resolve) => {
       dialog.warning({
-        title: '提示',
-        content: `第 ${currentChapter.value - 1} 章还未生成，建议先按顺序生成。是否继续？`,
-        positiveText: '继续生成',
-        negativeText: '取消',
+        title: 'Continue Out of Order?',
+        content: `Chapter ${currentChapter.value - 1} has not been generated yet. Generating in order is recommended. Continue anyway?`,
+        positiveText: 'Continue',
+        negativeText: 'Cancel',
         onPositiveClick: () => resolve(true),
         onNegativeClick: () => resolve(false)
       })
@@ -105,10 +105,10 @@ async function handleGenerate() {
     )
 
     chapterContent.value = draft
-    message.success(`第 ${currentChapter.value} 章草稿生成完成`)
+    message.success(`Chapter ${currentChapter.value} draft generated`)
   } catch (error) {
     console.error('Generation error:', error)
-    message.error('生成失败: ' + error.message)
+    message.error('Generation failed: ' + error.message)
   } finally {
     emit('update:isGenerating', false)
     generationStep.value = ''
@@ -118,12 +118,12 @@ async function handleGenerate() {
 // Save and finalize chapter - 保存并定稿章节
 async function handleSaveAndFinalize() {
   if (!chapterContent.value.trim()) {
-    message.warning('章节内容为空')
+    message.warning('Chapter content is empty')
     return
   }
 
   if (!settings.apiConfig.apiKey) {
-    message.warning('请先在设置中配置 API Key')
+    message.warning('Please configure the API Key in Settings first')
     return
   }
 
@@ -147,7 +147,7 @@ async function handleSaveAndFinalize() {
       ...updates
     })
 
-    message.success(`第 ${currentChapter.value} 章已保存并定稿`)
+    message.success(`Chapter ${currentChapter.value} saved and finalized`)
 
     // Generate chapter relation graph in background
     const savedChapter = currentChapter.value
@@ -161,7 +161,7 @@ async function handleSaveAndFinalize() {
     }
   } catch (error) {
     console.error('Finalize error:', error)
-    message.error('保存失败: ' + error.message)
+    message.error('Save failed: ' + error.message)
   } finally {
     emit('update:isGenerating', false)
     generationStep.value = ''
@@ -171,24 +171,24 @@ async function handleSaveAndFinalize() {
 // Quick save without finalize - 快速保存（不定稿）
 function handleQuickSave() {
   if (!chapterContent.value.trim()) {
-    message.warning('章节内容为空')
+    message.warning('Chapter content is empty')
     return
   }
 
   const updatedChapters = { ...props.project.chapters, [currentChapter.value]: chapterContent.value }
   novelStore.updateProject(props.project.id, { chapters: updatedChapters })
-  message.success('已保存')
+  message.success('Saved')
 }
 
 // Enrich chapter - 扩写章节
 async function handleEnrich() {
   if (!chapterContent.value.trim()) {
-    message.warning('请先生成或输入章节内容')
+    message.warning('Please generate or enter chapter content first')
     return
   }
 
   if (!settings.apiConfig.apiKey) {
-    message.warning('请先在设置中配置 API Key')
+    message.warning('Please configure the API Key in Settings first')
     return
   }
 
@@ -203,10 +203,10 @@ async function handleEnrich() {
     )
 
     chapterContent.value = enriched
-    message.success('扩写完成')
+    message.success('Chapter enriched')
   } catch (error) {
     console.error('Enrich error:', error)
-    message.error('扩写失败: ' + error.message)
+    message.error('Enrich failed: ' + error.message)
   } finally {
     emit('update:isGenerating', false)
     generationStep.value = ''
@@ -217,7 +217,7 @@ async function handleEnrich() {
 async function generateChapterGraphData(chapterNum, chapterText) {
   try {
     graphGenerating.value = true
-    graphStep.value = '正在提取本章人物关系...'
+    graphStep.value = 'Extracting chapter relationship graph...'
 
     const graphResult = await generateChapterGraph(
       props.project,
@@ -229,10 +229,10 @@ async function generateChapterGraphData(chapterNum, chapterText) {
 
     const updatedChapterGraphs = { ...props.project.chapterGraphs, [chapterNum]: graphResult }
     novelStore.updateProject(props.project.id, { chapterGraphs: updatedChapterGraphs })
-    message.success(`第 ${chapterNum} 章关系图谱已生成`)
+    message.success(`Chapter ${chapterNum} relationship graph generated`)
   } catch (err) {
     console.error('Chapter graph error:', err)
-    message.warning('关系图谱生成失败: ' + err.message)
+    message.warning('Relationship graph generation failed: ' + err.message)
   } finally {
     graphGenerating.value = false
     graphStep.value = ''
@@ -259,7 +259,7 @@ loadChapter(nextChapterToWrite.value)
       </p>
     </div>
 
-    <!-- Main content - 主内容 -->
+      <!-- Main content -->
     <template v-else>
       <!-- Progress indicator -->
       <div class="bg-white dark:bg-[#1f1f23] rounded-xl p-5 border border-gray-200/80 dark:border-gray-700/50">
@@ -279,13 +279,13 @@ loadChapter(nextChapterToWrite.value)
         />
       </div>
 
-      <!-- Chapter selector and editor - 章节选择器和编辑器 -->
+      <!-- Chapter selector and editor -->
       <div class="grid grid-cols-12 gap-4">
-        <!-- Chapter list sidebar - 章节列表侧边栏 -->
+        <!-- Chapter list sidebar -->
         <div class="col-span-3">
           <div class="bg-white dark:bg-[#1f1f23] rounded-xl border border-gray-200/80 dark:border-gray-700/50 overflow-hidden">
             <div class="p-4 border-b border-gray-200/80 dark:border-gray-700/50">
-              <h3 class="font-semibold text-gray-800 dark:text-white">章节列表</h3>
+              <h3 class="font-semibold text-gray-800 dark:text-white">Chapter List</h3>
             </div>
             <div class="max-h-[500px] overflow-y-auto">
               <div
@@ -297,7 +297,7 @@ loadChapter(nextChapterToWrite.value)
               >
                 <div class="flex items-center justify-between">
                   <span class="text-sm font-medium text-gray-800 dark:text-white truncate flex-1">
-                    第{{ ch.number }}章
+                    Chapter {{ ch.number }}
                   </span>
                   <CheckmarkCircleOutline v-if="project.chapters?.[ch.number]" class="w-5 h-5 text-green-500 ml-2" />
                 </div>
@@ -307,21 +307,21 @@ loadChapter(nextChapterToWrite.value)
           </div>
         </div>
 
-        <!-- Editor area - 编辑区域 -->
+        <!-- Editor area -->
         <div class="col-span-9 space-y-4">
-          <!-- Chapter info header - 章节信息头部 -->
+          <!-- Chapter info header -->
           <div class="bg-white dark:bg-[#1f1f23] rounded-xl p-5 border border-gray-200/80 dark:border-gray-700/50">
             <div class="flex items-center justify-between mb-3">
               <h3 class="text-lg font-bold text-gray-800 dark:text-white">
-                第{{ currentChapter }}章 - {{ currentChapterInfo?.title || '未命名' }}
+                Chapter {{ currentChapter }} - {{ currentChapterInfo?.title || 'Untitled' }}
               </h3>
               <div class="flex items-center gap-2">
-                <n-tag v-if="chapterExists" type="success" size="small" :bordered="false" round>已保存</n-tag>
-                <n-tag v-else type="info" size="small" :bordered="false" round>未保存</n-tag>
+                <n-tag v-if="chapterExists" type="success" size="small" :bordered="false" round>Saved</n-tag>
+                <n-tag v-else type="info" size="small" :bordered="false" round>Unsaved</n-tag>
               </div>
             </div>
             
-            <!-- Chapter meta info - 章节元信息 -->
+            <!-- Chapter meta info -->
             <div v-if="currentChapterInfo" class="flex flex-wrap gap-2 text-xs">
               <n-tag size="small" :bordered="false" round>{{ currentChapterInfo.position }}</n-tag>
               <n-tag size="small" type="success" :bordered="false" round>{{ currentChapterInfo.purpose }}</n-tag>
@@ -332,48 +332,48 @@ loadChapter(nextChapterToWrite.value)
             </p>
           </div>
 
-          <!-- Global Summary - 前文摘要 -->
+          <!-- Global Summary -->
           <div 
             v-if="currentChapter > 1 && project.globalSummary" 
             class="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/10 dark:to-orange-900/10 rounded-xl p-4 border border-amber-200/50 dark:border-amber-700/30"
           >
             <div class="flex items-center gap-2 mb-2">
               <DocumentTextOutline class="w-4 h-4 text-amber-600 dark:text-amber-400" />
-              <span class="text-sm font-medium text-amber-700 dark:text-amber-300">前文摘要</span>
+              <span class="text-sm font-medium text-amber-700 dark:text-amber-300">Previous Summary</span>
             </div>
             <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed whitespace-pre-wrap max-h-32 overflow-y-auto">
               {{ project.globalSummary }}
             </p>
           </div>
 
-          <!-- Generation status - 生成状态 -->
+          <!-- Generation status -->
           <div v-if="isGenerating" class="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-xl p-4 border border-indigo-200/50 dark:border-indigo-700/50">
             <div class="flex items-center gap-3">
               <ReloadOutline class="w-5 h-5 text-indigo-500 animate-spin" />
-              <span class="text-indigo-700 dark:text-indigo-300 font-medium">{{ generationStep || '处理中...' }}</span>
+              <span class="text-indigo-700 dark:text-indigo-300 font-medium">{{ generationStep || 'Processing...' }}</span>
             </div>
           </div>
 
-          <!-- Action buttons - 操作按钮 -->
+          <!-- Action buttons -->
           <div class="flex items-center gap-2 flex-wrap">
             <n-button type="primary" :loading="isGenerating" @click="handleGenerate">
               <template #icon>
                 <n-icon><SparklesOutline /></n-icon>
               </template>
-              生成草稿
+              Generate Draft
             </n-button>
             <n-button :disabled="isGenerating || !chapterContent" @click="handleEnrich" secondary>
               <template #icon>
                 <n-icon><PencilOutline /></n-icon>
               </template>
-              扩写
+              Enrich
             </n-button>
             <div class="flex-1"></div>
             <n-button :disabled="isGenerating || !chapterContent" @click="handleQuickSave" tertiary>
               <template #icon>
                 <n-icon><SaveOutline /></n-icon>
               </template>
-              快速保存
+              Quick Save
             </n-button>
             <n-tooltip trigger="hover">
               <template #trigger>
@@ -381,13 +381,13 @@ loadChapter(nextChapterToWrite.value)
                   <HelpCircleOutline />
                 </n-icon>
               </template>
-              仅保存章节内容，不更新摘要和角色状态
+              Save chapter content only, without updating the summary or character state
             </n-tooltip>
             <n-button type="success" :loading="isGenerating" :disabled="!chapterContent" @click="handleSaveAndFinalize">
               <template #icon>
                 <n-icon><CheckmarkOutline /></n-icon>
               </template>
-              保存并定稿
+              Save and Finalize
             </n-button>
             <n-tooltip trigger="hover">
               <template #trigger>
@@ -395,34 +395,34 @@ loadChapter(nextChapterToWrite.value)
                   <HelpCircleOutline />
                 </n-icon>
               </template>
-              保存内容并更新章节摘要、角色状态，用于后续章节的上下文连贯性
+              Save the chapter and update the summary and character state for later-chapter continuity
             </n-tooltip>
           </div>
 
-          <!-- Editor textarea - 编辑器文本框 -->
+          <!-- Editor textarea -->
           <n-input
             v-model:value="chapterContent"
             type="textarea"
             :autosize="{ minRows: 20, maxRows: 40 }"
-            :placeholder="`在此编写或生成第 ${currentChapter} 章内容...`"
+            :placeholder="`Write or generate Chapter ${currentChapter} here...`"
             class="novel-textarea"
           />
 
-          <!-- Word count - 字数统计 -->
+          <!-- Word count -->
           <div class="text-right text-sm text-gray-500 dark:text-gray-400">
-            当前字数：<span class="font-medium text-gray-700 dark:text-gray-300">{{ chapterContent.length }}</span> / 目标：{{ project.wordNumber }}
+            Current words: <span class="font-medium text-gray-700 dark:text-gray-300">{{ chapterContent.length }}</span> / Target: {{ project.wordNumber }}
           </div>
 
-          <!-- Chapter relation graph - 章节关系图谱 -->
+          <!-- Chapter relation graph -->
           <div v-if="graphGenerating" class="flex items-center gap-3 px-4 py-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl text-sm text-indigo-600 dark:text-indigo-400">
             <span class="w-4 h-4 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
-            {{ graphStep || '正在生成关系图谱...' }}
+            {{ graphStep || 'Generating relationship graph...' }}
           </div>
           <div v-if="currentChapterGraph" class="bg-white dark:bg-[#1f1f23] rounded-xl border border-gray-200/80 dark:border-gray-700/50 overflow-hidden">
             <div class="px-4 py-3 border-b border-gray-200/80 dark:border-gray-700/50 flex items-center justify-between">
-              <span class="text-sm font-medium text-gray-700 dark:text-gray-200">本章人物关系图谱</span>
+              <span class="text-sm font-medium text-gray-700 dark:text-gray-200">Chapter Relationship Graph</span>
               <n-tag size="small" :bordered="false" round type="info">
-                {{ currentChapterGraph.nodes?.length || 0 }} 角色 · {{ currentChapterGraph.edges?.length || 0 }} 关系
+                {{ currentChapterGraph.nodes?.length || 0 }} characters · {{ currentChapterGraph.edges?.length || 0 }} relationships
               </n-tag>
             </div>
             <ChapterRelationGraph :graph-data="currentChapterGraph" :height="360" />
@@ -432,4 +432,3 @@ loadChapter(nextChapterToWrite.value)
     </template>
   </div>
 </template>
-

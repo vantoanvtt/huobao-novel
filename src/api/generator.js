@@ -1,5 +1,6 @@
 import { chatCompletion, cleanResponse } from './llm'
 import { architecturePrompts, chapterPrompts, utilityPrompts } from '../prompts'
+import { normalizeGenreList } from '../utils/genre'
 
 // Destructure prompts
 const { coreSeed: coreSeedPrompt, characterDynamics: characterDynamicsPrompt, worldBuilding: worldBuildingPrompt, plotArchitecture: plotArchitecturePrompt, characterState: createCharacterStatePrompt } = architecturePrompts
@@ -7,6 +8,7 @@ const { blueprint: chapterBlueprintPrompt, blueprintChunked: chunkedChapterBluep
 const { summary: summaryPrompt, updateCharacterState: updateCharacterStatePrompt } = utilityPrompts
 
 function formatGenre(genre) {
+  genre = normalizeGenreList(genre)
   if (Array.isArray(genre)) return genre.join(' / ')
   return genre || ''
 }

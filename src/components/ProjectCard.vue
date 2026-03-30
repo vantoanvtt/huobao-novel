@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { NButton, NProgress, NTag, NIcon } from 'naive-ui'
 import { TrashOutline } from '@vicons/ionicons5'
+import { normalizeGenreList } from '../utils/genre'
 
 const props = defineProps({
   project: {
@@ -34,7 +35,7 @@ const statusInfo = computed(() => {
 })
 
 const genreText = computed(() => {
-  const genre = props.project?.genre
+  const genre = normalizeGenreList(props.project?.genre)
   if (Array.isArray(genre)) return genre.join(' / ')
   return genre || ''
 })

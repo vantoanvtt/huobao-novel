@@ -1,10 +1,21 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import { normalizeGenreList } from '../utils/genre'
+
+function normalizeProject(project) {
+  if (!project || typeof project !== 'object') return project
+  return {
+    ...project,
+    genre: normalizeGenreList(project.genre)
+  }
+}
 
 // Novel project store
 export const useNovelStore = defineStore('novel', () => {
   // State
-  const projects = ref(JSON.parse(localStorage.getItem('novel_projects') || '[]'))
+  const projects = ref(
+    JSON.parse(localStorage.getItem('novel_projects') || '[]').map(normalizeProject)
+  )
   const currentProject = ref(null)
   const isGenerating = ref(false)
   const generationProgress = ref('')
@@ -16,7 +27,7 @@ export const useNovelStore = defineStore('novel', () => {
   // Actions
   // Create a new novel project
   function createProject(projectData) {
-    const newProject = {
+    const newProject = normalizeProject({
       id: Date.now().toString(),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -46,7 +57,7 @@ export const useNovelStore = defineStore('novel', () => {
       // Generation status
       architectureGenerated: false,
       blueprintGenerated: false
-    }
+    })
     projects.value.unshift(newProject)
     saveToStorage()
     return newProject
@@ -56,11 +67,11 @@ export const useNovelStore = defineStore('novel', () => {
   function updateProject(id, updates) {
     const index = projects.value.findIndex(p => p.id === id)
     if (index !== -1) {
-      projects.value[index] = {
+      projects.value[index] = normalizeProject({
         ...projects.value[index],
         ...updates,
         updatedAt: new Date().toISOString()
-      }
+      })
       saveToStorage()
       if (currentProject.value?.id === id) {
         currentProject.value = projects.value[index]
@@ -89,6 +100,8 @@ export const useNovelStore = defineStore('novel', () => {
   function saveToStorage() {
     localStorage.setItem('novel_projects', JSON.stringify(projects.value))
   }
+
+  saveToStorage()
 
   // Set generation state
   function setGenerating(value, progress = '') {

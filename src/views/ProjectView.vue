@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useNovelStore } from '../stores/novel'
 import { useSettingsStore } from '../stores/settings'
 import { generateArchitecture, generateChapterBlueprint, parseChapterBlueprint, exportNovelToText, exportNovelToMarkdown } from '../api/generator'
+import { normalizeGenreList } from '../utils/genre'
 import { useMessage, useDialog, NButton, NTabs, NTabPane, NCard, NProgress, NTag, NIcon } from 'naive-ui'
 import { ArrowBackOutline, WarningOutline, GridOutline, ListOutline, PencilOutline, DownloadOutline, DocumentTextOutline, ReloadOutline, CompassOutline } from '@vicons/ionicons5'
 import ArchitecturePanel from '../components/ArchitecturePanel.vue'
@@ -43,7 +44,7 @@ const isApiConfigured = computed(() => {
 })
 
 const genreText = computed(() => {
-  const genre = project.value?.genre
+  const genre = normalizeGenreList(project.value?.genre)
   if (Array.isArray(genre)) return genre.join(' / ')
   return genre || ''
 })
@@ -158,6 +159,8 @@ async function confirmRegenerate(type) {
   dialog.warning({
     title: 'Confirm Regenerate',
     content: `Are you sure you want to regenerate the ${type === 'architecture' ? 'novel architecture' : 'chapter blueprint'}? Existing content will be overwritten.`,
+    positiveText: 'Regenerate',
+    negativeText: 'Cancel',
     onPositiveClick: () => {
       if (type === 'architecture') {
         novelStore.updateProject(project.value.id, {

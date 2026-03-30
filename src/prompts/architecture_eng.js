@@ -96,6 +96,8 @@ To serve the above content, please build a worldview suitable for 【${params.ge
 **Important**: World design must serve the core experience of 【${params.genre || 'General'}】 genre, creating an atmosphere fitting the genre characteristics.
 
 Requirements:
+Write the entire response in English only.
+Do not use Chinese.
 Each dimension should include at least 3 dynamic elements that can interact with character decisions.
 Return only final text, do not explain anything.
 `
@@ -133,6 +135,8 @@ Act III (Climax and Resolution)
 
 **Important**: Plot design must meet reader expectations for 【${params.genre || 'General'}】 genre, ensuring consistent emotional tone.
 
+Write the entire response in English only.
+Do not use Chinese.
 Each stage should include 3 key nodes with foreshadowing design.
 Return only final text, do not explain anything.
 `

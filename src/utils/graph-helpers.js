@@ -239,7 +239,7 @@ export function generateExportHTML(graphData, projectTitle) {
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>${projectTitle} - 人物关系图谱</title>
+<title>${projectTitle} - Character Relationship Graph</title>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"><\/script>
 <style>
   body { margin: 0; background: #0f172a; font-family: system-ui; overflow: hidden; }
@@ -248,7 +248,7 @@ export function generateExportHTML(graphData, projectTitle) {
 </style>
 </head>
 <body>
-<div class="title">${projectTitle} - 人物关系图谱</div>
+<div class="title">${projectTitle} - Character Relationship Graph</div>
 <div id="graph"></div>
 <script>
 var data = ${dataJson};

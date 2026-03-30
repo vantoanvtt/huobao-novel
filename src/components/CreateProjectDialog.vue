@@ -20,7 +20,7 @@ const formRef = ref(null)
 const form = reactive({
   title: '',
   topic: '',
-  genre: ['玄幻'],
+  genre: ['Fantasy'],
   numberOfChapters: 100,
   wordNumber: 3000,
   userGuidance: ''
@@ -28,21 +28,21 @@ const form = reactive({
 
 // Genre options
 const genreOptions = [
-  { label: 'Fantasy', value: '玄幻' },
-  { label: 'Xianxia', value: '仙侠' },
-  { label: 'Urban', value: '都市' },
-  { label: 'Historical', value: '历史' },
-  { label: 'Sci-Fi', value: '科幻' },
-  { label: 'Game', value: '游戏' },
-  { label: 'Mystery', value: '悬疑' },
-  { label: 'Supernatural', value: '奇幻' },
-  { label: 'Martial Arts', value: '武侠' },
-  { label: 'Romance', value: '言情' },
-  { label: 'Military', value: '军事' },
-  { label: 'Sports', value: '体育' },
-  { label: 'Horror', value: '灵异' },
-  { label: 'Anime', value: '二次元' },
-  { label: 'Other', value: '其他' }
+  { label: 'Fantasy', value: 'Fantasy' },
+  { label: 'Xianxia', value: 'Xianxia' },
+  { label: 'Urban', value: 'Urban' },
+  { label: 'Historical', value: 'Historical' },
+  { label: 'Sci-Fi', value: 'Sci-Fi' },
+  { label: 'Game', value: 'Game' },
+  { label: 'Mystery', value: 'Mystery' },
+  { label: 'Supernatural', value: 'Supernatural' },
+  { label: 'Martial Arts', value: 'Martial Arts' },
+  { label: 'Romance', value: 'Romance' },
+  { label: 'Military', value: 'Military' },
+  { label: 'Sports', value: 'Sports' },
+  { label: 'Horror', value: 'Horror' },
+  { label: 'Anime', value: 'Anime' },
+  { label: 'Other', value: 'Other' }
 ]
 
 // Form rules
@@ -68,7 +68,7 @@ watch(() => props.modelValue, (val) => {
   if (val) {
     form.title = ''
     form.topic = ''
-    form.genre = ['玄幻']
+    form.genre = ['Fantasy']
     form.numberOfChapters = 100
     form.wordNumber = 3000
     form.userGuidance = ''

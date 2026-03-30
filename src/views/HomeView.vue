@@ -99,17 +99,17 @@ function openProject(project) {
       <p class="text-gray-500 dark:text-gray-400 mb-6">Click the button above to create your first novel project</p>
     </div>
 
-    <!-- Features Section - 功能介绍 -->
+    <!-- Features Section -->
     <div class="mt-20 mb-12">
-      <h2 class="text-2xl font-bold text-center text-gray-800 dark:text-white mb-10">核心功能</h2>
+      <h2 class="text-2xl font-bold text-center text-gray-800 dark:text-white mb-10">Core Features</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="bg-white dark:bg-[#1f1f23] rounded-2xl p-6 border border-gray-200/80 dark:border-gray-700/50 hover:shadow-xl hover:shadow-indigo-500/5 hover:border-indigo-300 dark:hover:border-indigo-600/50 transition-all duration-300 group">
           <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center mb-5 shadow-lg shadow-indigo-500/25 group-hover:scale-110 transition-transform">
             <RocketOutline class="w-7 h-7 text-white" />
           </div>
-          <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-3">雪花写作法</h3>
+          <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-3">Snowflake Writing Method</h3>
           <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-            从核心种子开始，逐步扩展角色、世界观、情节架构，构建完整故事
+            Start from a core seed, then expand into characters, world building, and plot architecture.
           </p>
         </div>
 
@@ -117,9 +117,9 @@ function openProject(project) {
           <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center mb-5 shadow-lg shadow-purple-500/25 group-hover:scale-110 transition-transform">
             <PersonOutline class="w-7 h-7 text-white" />
           </div>
-          <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-3">角色弧光理论</h3>
+          <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-3">Character Arc Design</h3>
           <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-            设计具有动态变化潜力的角色，包含驱动力三角和关系冲突网
+            Build characters with growth potential, layered motivation, and relationship conflict.
           </p>
         </div>
 
@@ -127,15 +127,15 @@ function openProject(project) {
           <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-rose-500 to-orange-600 flex items-center justify-center mb-5 shadow-lg shadow-rose-500/25 group-hover:scale-110 transition-transform">
             <TrendingUpOutline class="w-7 h-7 text-white" />
           </div>
-          <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-3">悬念节奏曲线</h3>
+          <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-3">Suspense Rhythm Curve</h3>
           <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-            智能规划章节节奏，设置认知过山车，保持读者阅读兴趣
+            Plan chapter pacing intelligently to maintain tension and reader engagement.
           </p>
         </div>
       </div>
     </div>
 
-    <!-- Create Project Dialog - 创建项目对话框 -->
+    <!-- Create Project Dialog -->
     <CreateProjectDialog v-model="showCreateDialog" />
   </div>
 </template>
