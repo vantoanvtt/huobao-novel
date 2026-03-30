@@ -12,25 +12,25 @@ const props = defineProps({
 const emit = defineEmits(['generate', 'regenerate'])
 const novelStore = useNovelStore()
 
-// Expanded sections - 展开的部分
+// Expanded sections
 const expandedSections = ref(['coreSeed', 'characterDynamics', 'worldBuilding', 'plotArchitecture'])
 
-// Architecture sections config - 架构部分配置
+// Architecture sections config
 const sections = [
-  { key: 'coreSeed', title: '核心种子', icon: LocateOutline, description: '故事的本质和核心冲突', color: 'from-rose-500 to-orange-500' },
-  { key: 'characterDynamics', title: '角色体系', icon: PersonOutline, description: '核心角色的动力学设计', color: 'from-blue-500 to-cyan-500' },
-  { key: 'worldBuilding', title: '世界观', icon: GlobeOutline, description: '三维交织的世界观构建', color: 'from-emerald-500 to-teal-500' },
-  { key: 'plotArchitecture', title: '情节架构', icon: TrendingUpOutline, description: '三幕式悬念结构', color: 'from-violet-500 to-purple-500' },
-  { key: 'characterState', title: '角色状态', icon: DocumentTextOutline, description: '角色初始状态表', color: 'from-amber-500 to-yellow-500' }
+  { key: 'coreSeed', title: 'Core Seed', icon: LocateOutline, description: 'Story essence and core conflict', color: 'from-rose-500 to-orange-500' },
+  { key: 'characterDynamics', title: 'Character System', icon: PersonOutline, description: 'Core character dynamics design', color: 'from-blue-500 to-cyan-500' },
+  { key: 'worldBuilding', title: 'World Building', icon: GlobeOutline, description: 'Three-dimensional world construction', color: 'from-emerald-500 to-teal-500' },
+  { key: 'plotArchitecture', title: 'Plot Architecture', icon: TrendingUpOutline, description: 'Three-act suspense structure', color: 'from-violet-500 to-purple-500' },
+  { key: 'characterState', title: 'Character State', icon: DocumentTextOutline, description: 'Initial character state table', color: 'from-amber-500 to-yellow-500' }
 ]
 
-// Check if has content - 检查是否有内容
+// Check if has content
 const hasContent = computed(() => {
   return props.project?.coreSeed || props.project?.characterDynamics || 
          props.project?.worldBuilding || props.project?.plotArchitecture
 })
 
-// Update section content - 更新部分内容
+// Update section content
 function updateContent(key, value) {
   novelStore.updateProject(props.project.id, { [key]: value })
 }
@@ -38,16 +38,16 @@ function updateContent(key, value) {
 
 <template>
   <div class="space-y-4">
-    <!-- Generate button area - 生成按钮区域 -->
+    <!-- Generate button area -->
     <div v-if="!hasContent" class="bg-white dark:bg-[#1f1f23] rounded-2xl p-12 border border-gray-200/80 dark:border-gray-700/50 text-center">
       <div class="w-24 h-24 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-xl shadow-indigo-500/25">
         <SparklesOutline class="w-12 h-12 text-white" />
       </div>
       <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-3">
-        开始生成小说架构
+        Generate Novel Architecture
       </h3>
       <p class="text-gray-500 dark:text-gray-400 mb-8 max-w-md mx-auto leading-relaxed">
-        AI 将基于雪花写作法，为你生成核心种子、角色体系、世界观和情节架构
+        AI will generate core seed, character system, world building, and plot architecture
       </p>
       <n-button 
         type="primary" 
@@ -59,13 +59,13 @@ function updateContent(key, value) {
         <template #icon v-if="!isGenerating">
           <n-icon><PlayOutline /></n-icon>
         </template>
-        {{ isGenerating ? '生成中...' : '开始生成架构' }}
+        {{ isGenerating ? 'Generating...' : 'Generate Architecture' }}
       </n-button>
     </div>
 
-    <!-- Content sections - 内容部分 -->
+    <!-- Content sections -->
     <template v-else>
-      <!-- Action bar - 操作栏 -->
+      <!-- Action bar -->
       <div class="flex justify-end mb-4">
         <n-button 
           :disabled="isGenerating"
@@ -76,11 +76,11 @@ function updateContent(key, value) {
           <template #icon>
             <n-icon><RefreshOutline /></n-icon>
           </template>
-          重新生成
+          Regenerate
         </n-button>
       </div>
 
-      <!-- Collapsible sections - 可折叠部分 -->
+      <!-- Collapsible sections -->
       <n-collapse 
         v-model:expanded-names="expandedSections" 
         class="architecture-collapse"
@@ -106,7 +106,7 @@ function updateContent(key, value) {
                 :bordered="false"
                 round
               >
-                已生成
+                Generated
               </n-tag>
             </div>
           </template>
@@ -117,7 +117,7 @@ function updateContent(key, value) {
               :value="project[section.key]"
               @update:value="updateContent(section.key, $event)"
               :autosize="{ minRows: 6, maxRows: 20 }"
-              :placeholder="project[section.key] ? '' : '暂无内容，点击生成按钮开始'"
+              :placeholder="project[section.key] ? '' : 'No content. Click the generate button to start'"
               class="novel-textarea"
             />
           </div>

@@ -40,7 +40,7 @@ function renderData(data) {
         if (params.dataType === 'edge') {
           const raw = params.data._raw
           if (!raw) return ''
-          return `${raw.label || ''}<br/>类型: ${RELATION_LABELS[raw.relationType] || raw.relationType}`
+          return `${raw.label || ''}<br/>Type: ${RELATION_LABELS[raw.relationType] || raw.relationType}`
         }
         return ''
       }

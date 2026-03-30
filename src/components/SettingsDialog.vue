@@ -14,7 +14,7 @@ const emit = defineEmits(['update:modelValue'])
 const settings = useSettingsStore()
 const message = useMessage()
 
-// Channel configurations - 渠道配置
+// Channel configurations
 const channels = [
   { 
     id: 'chatfire', 
@@ -30,34 +30,34 @@ const channels = [
       // 'gemini-2.5-pro'
     ]
   },
-  // { 
-  //   id: 'openai', 
-  //   name: 'OpenAI',
-  //   baseUrl: 'https://api.openai.com/v1',
-  //   models: ['gpt-5.2', 'gpt-4o', 'gpt-4o-mini']
-  // },
-  // { 
-  //   id: 'gemini', 
-  //   name: 'Google Gemini',
-  //   baseUrl: 'https://generativelanguage.googleapis.com/v1beta/openai',
-  //   models: ['gemini-2.5-pro', 'gemini-3-pro-preview']
-  // }
+  { 
+    id: 'openai', 
+    name: 'OpenAI',
+    baseUrl: 'https://api.openai.com/v1',
+    models: ['gpt-5.2', 'gpt-4o', 'gpt-4o-mini']
+  },
+  { 
+    id: 'gemini', 
+    name: 'Google Gemini',
+    baseUrl: 'https://generativelanguage.googleapis.com/v1beta/openai',
+    models: ['gemini-2.5-pro', 'gemini-3-pro-preview']
+  }
 ]
 
-// Current channel - 当前渠道
+// Current channel
 const currentChannel = ref('chatfire')
 
-// Channel options for select - 渠道选项
+// Channel options for select
 const channelOptions = channels.map(c => ({ label: c.name, value: c.id }))
 
-// Current channel models - 当前渠道的模型列表
+// Current channel models
 import { computed } from 'vue'
 const currentChannelModels = computed(() => {
   const channel = channels.find(c => c.id === currentChannel.value)
   return channel?.models.map(m => ({ label: m, value: m })) || []
 })
 
-// Initialize with default values - 使用默认值初始化
+// Initialize with default values
 const localConfig = ref({
   channel: 'chatfire',
   baseUrl: 'https://api.chatfire.site/v1',
@@ -68,7 +68,7 @@ const localConfig = ref({
   timeout: 600
 })
 
-// Handle channel change - 处理渠道切换
+// Handle channel change
 function handleChannelChange(channelId) {
   currentChannel.value = channelId
   const channel = channels.find(c => c.id === channelId)
@@ -79,7 +79,7 @@ function handleChannelChange(channelId) {
   }
 }
 
-// Stage-specific models - 各环节模型配置
+// Stage-specific models
 const localStageModels = ref({
   architecture: '',
   blueprint: '',
@@ -88,16 +88,16 @@ const localStageModels = ref({
   enrich: ''
 })
 
-// Stage labels - 环节标签
+// Stage labels
 const stageLabels = {
-  architecture: '架构生成',
-  blueprint: '大纲生成',
-  chapter: '章节生成',
-  finalize: '定稿处理',
-  enrich: '章节扩写'
+  architecture: 'Architecture',
+  blueprint: 'Blueprint',
+  chapter: 'Chapter',
+  finalize: 'Finalize',
+  enrich: 'Enrich'
 }
 
-// Sync local config when dialog opens - 打开对话框时同步本地配置
+// Sync local config when dialog opens
 watch(() => props.modelValue, (val) => {
   if (val) {
     localConfig.value = { ...settings.apiConfig }
@@ -106,22 +106,22 @@ watch(() => props.modelValue, (val) => {
   }
 }, { immediate: true })
 
-// Save settings - 保存设置
+// Save settings
 function saveSettings() {
   if (!localConfig.value.apiKey) {
-    message.warning('请输入 API Key')
+    message.warning('Please enter API Key')
     return
   }
   settings.updateApiConfig(localConfig.value)
   settings.updateStageModels(localStageModels.value)
-  message.success('设置已保存')
+  message.success('Settings saved')
   emit('update:modelValue', false)
 }
 
-// Test connection - 测试连接
+// Test connection
 async function testConnection() {
   if (!localConfig.value.apiKey) {
-    message.warning('请先输入 API Key')
+    message.warning('Please enter API Key')
     return
   }
   
@@ -133,12 +133,12 @@ async function testConnection() {
     })
     
     if (response.ok) {
-      message.success('连接成功!')
+      message.success('Connection successful!')
     } else {
-      message.error('连接失败: ' + response.status)
+      message.error('Connection failed: ' + response.status)
     }
   } catch (error) {
-    message.error('连接失败: ' + error.message)
+    message.error('Connection failed: ' + error.message)
   }
 }
 
@@ -153,14 +153,14 @@ function goToGetKey() {
     @update:show="emit('update:modelValue', $event)"
     :mask-closable="false"
     preset="card"
-    title="API 设置"
+    title="API Settings"
     style="width: 520px"
     :bordered="false"
     class="!rounded-2xl"
   >
     <n-form label-placement="top" class="space-y-1">
       <!-- Channel Select -->
-      <n-form-item label="渠道">
+      <n-form-item label="Channel">
         <n-select
           :value="currentChannel"
           :options="channelOptions"
@@ -181,7 +181,7 @@ function goToGetKey() {
         <n-input 
           v-model:value="localConfig.apiKey" 
           type="password"
-          placeholder="请输入 API Key"
+          placeholder="Enter API Key"
           show-password-on="click"
         />
       </n-form-item>
@@ -190,22 +190,22 @@ function goToGetKey() {
       <n-form-item>
         <template #label>
           <div class="flex items-center gap-1">
-            <span>默认模型</span>
+            <span>Default Model</span>
             <n-tooltip trigger="hover">
               <template #trigger>
                 <n-icon class="text-gray-400 cursor-help" :size="14">
                   <HelpCircleOutline />
                 </n-icon>
               </template>
-              未单独配置环节模型时使用此模型
+              Use this model when stage-specific models are not configured
             </n-tooltip>
           </div>
         </template>
-<n-auto-complete
+        <n-auto-complete
           v-model:value="localConfig.model"
           :options="currentChannelModels"
           :get-show="() => true"
-          placeholder="选择或输入模型名称"
+          placeholder="Select or enter model name"
           clearable
         />
       </n-form-item>
@@ -213,23 +213,23 @@ function goToGetKey() {
       <!-- Stage-specific Models -->
       <div class="mt-4">
         <div class="flex items-center gap-1 mb-3">
-          <span class="text-sm font-medium text-gray-700 dark:text-gray-300">各环节模型配置</span>
+          <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Stage-specific Models</span>
           <n-tooltip trigger="hover">
             <template #trigger>
               <n-icon class="text-gray-400 cursor-help" :size="14">
                 <HelpCircleOutline />
               </n-icon>
             </template>
-            留空则使用默认模型
+            Leave empty to use default model
           </n-tooltip>
         </div>
         <n-tabs type="segment" size="small">
           <n-tab-pane v-for="(label, key) in stageLabels" :key="key" :name="key" :tab="label">
-<n-auto-complete
+            <n-auto-complete
               v-model:value="localStageModels[key]"
               :options="currentChannelModels"
               :get-show="() => true"
-              placeholder="留空使用默认模型"
+              placeholder="Leave empty to use default model"
               class="mt-3"
               clearable
             />
@@ -242,18 +242,12 @@ function goToGetKey() {
       <div class="flex justify-between">
         <n-space>
           <n-button @click="goToGetKey" tertiary>
-            获取 Key
+            Get Key
           </n-button>
-          <!-- <n-button @click="testConnection" tertiary>
-            <template #icon>
-              <n-icon><FlashOutline /></n-icon>
-            </template>
-            测试连接
-          </n-button> -->
         </n-space>
         <n-space>
-          <n-button @click="emit('update:modelValue', false)">取消</n-button>
-          <n-button type="primary" @click="saveSettings">保存</n-button>
+          <n-button @click="emit('update:modelValue', false)">Cancel</n-button>
+          <n-button type="primary" @click="saveSettings">Save</n-button>
         </n-space>
       </div>
     </template>

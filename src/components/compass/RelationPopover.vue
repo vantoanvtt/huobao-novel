@@ -49,7 +49,7 @@ const targetNode = computed(() => {
           </span>
         </div>
         <div class="text-xs text-gray-400 mt-1">
-          关系强度 {{ edge.strength }}/10
+          Strength {{ edge.strength }}/10
         </div>
       </div>
 
@@ -62,7 +62,7 @@ const targetNode = computed(() => {
         <!-- Events Timeline -->
         <div v-if="edge.events?.length" class="space-y-2">
           <div class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-            关系大事件
+            Major Events
           </div>
           <div
             v-for="(event, i) in edge.events"
@@ -80,7 +80,7 @@ const targetNode = computed(() => {
 
       <!-- Close hint -->
       <div class="px-4 py-2 bg-gray-50 dark:bg-gray-800/50 text-xs text-gray-400 text-center">
-        点击其他区域关闭
+        Click other areas to close
       </div>
     </div>
   </transition>

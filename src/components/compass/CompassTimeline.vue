@@ -22,7 +22,7 @@ const hasMultipleSnapshots = computed(() => snapshotChapters.value.length > 1)
 const marks = computed(() => {
   const m = {}
   snapshotChapters.value.forEach(ch => {
-    m[ch] = ch === 0 ? '基线' : `${ch}`
+    m[ch] = ch === 0 ? 'Baseline' : `${ch}`
   })
   return m
 })
@@ -91,7 +91,7 @@ function stopPlay() {
 }
 
 watch(() => props.snapshots, () => {
-  // 当快照更新时，如果当前章节超出范围，重置
+  // Reset if current chapter exceeds range when snapshots update
   if (currentChapter.value > maxSliderValue.value) {
     currentChapter.value = 0
     emit('chapter-change', 0)
@@ -141,7 +141,7 @@ watch(() => props.snapshots, () => {
       </div>
 
       <n-tag size="small" :bordered="false" round class="flex-shrink-0">
-        {{ currentChapter === 0 ? '基线' : `第 ${currentChapter} 章` }}
+        {{ currentChapter === 0 ? 'Baseline' : `Chapter ${currentChapter}` }}
       </n-tag>
     </div>
   </div>

@@ -57,11 +57,11 @@ const isWorking = computed(() => localGenerating.value || props.isGenerating)
 // Generate base graph
 async function handleGenerate() {
   if (!settings.apiConfig.apiKey) {
-    message.warning('请先在设置中配置 API Key')
+    message.warning('Please configure API Key in settings')
     return
   }
   if (!props.project.architectureGenerated) {
-    message.warning('请先生成小说架构')
+    message.warning('Please generate novel architecture first')
     return
   }
 
@@ -76,11 +76,11 @@ async function handleGenerate() {
     )
 
     novelStore.updateProject(props.project.id, { graphData: result })
-    message.success('图谱生成完成!')
+    message.success('Graph generated successfully!')
     currentChapter.value = 0
   } catch (err) {
     console.error('Graph generation error:', err)
-    message.error('图谱生成失败: ' + err.message)
+    message.error('Graph generation failed: ' + err.message)
   } finally {
     localGenerating.value = false
     emit('update:isGenerating', false)
@@ -91,7 +91,7 @@ async function handleGenerate() {
 // Update chapter snapshots
 async function handleUpdateSnapshots() {
   if (!settings.apiConfig.apiKey) {
-    message.warning('请先在设置中配置 API Key')
+    message.warning('Please configure API Key in settings')
     return
   }
 
@@ -106,10 +106,10 @@ async function handleUpdateSnapshots() {
     )
 
     novelStore.updateProject(props.project.id, { graphData: result })
-    message.success('章节快照更新完成!')
+    message.success('Chapter snapshots updated successfully!')
   } catch (err) {
     console.error('Snapshot generation error:', err)
-    message.error('快照更新失败: ' + err.message)
+    message.error('Snapshot update failed: ' + err.message)
   } finally {
     localGenerating.value = false
     emit('update:isGenerating', false)
@@ -172,10 +172,10 @@ function handleDeleteNode(nodeId) {
   }
 
   dialog.warning({
-    title: '删除节点确认',
-    content: `删除「${node.label}」将影响${affectedChapters.length > 0 ? `第 ${affectedChapters.join('、')} 章` : '当前'}图谱数据。确定删除？`,
-    positiveText: '确定删除',
-    negativeText: '取消',
+    title: 'Delete Node Confirmation',
+    content: `Deleting "${node.label}" will affect the graph data. Are you sure?`,
+    positiveText: 'Delete',
+    negativeText: 'Cancel',
     onPositiveClick: () => {
       const updatedSnapshots = { ...snapshots }
       for (const [ch, snap] of Object.entries(updatedSnapshots)) {
@@ -188,7 +188,7 @@ function handleDeleteNode(nodeId) {
       novelStore.updateProject(props.project.id, { graphData: updatedGraphData })
       sidebarVisible.value = false
       selectedNode.value = null
-      message.success(`已删除「${node.label}」`)
+      message.success(`Deleted "${node.label}"`)
     }
   })
 }
@@ -201,11 +201,11 @@ async function handleExportPNG() {
     if (!dataUrl) return
     const a = document.createElement('a')
     a.href = dataUrl
-    a.download = `${props.project.title}-关系图谱.png`
+    a.download = `${props.project.title}-relationship-graph.png`
     a.click()
-    message.success('PNG 导出成功')
+    message.success('PNG exported successfully')
   } catch (err) {
-    message.error('PNG 导出失败')
+    message.error('PNG export failed')
   }
 }
 
@@ -213,17 +213,17 @@ async function handleExportPNG() {
 function handleExportHTML() {
   const html = generateExportHTML(graphData.value, props.project.title)
   if (!html) {
-    message.warning('暂无图谱数据可导出')
+    message.warning('No graph data available for export')
     return
   }
   const blob = new Blob([html], { type: 'text/html;charset=utf-8' })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
-  a.download = `${props.project.title}-关系图谱.html`
+  a.download = `${props.project.title}-relationship-graph.html`
   a.click()
   URL.revokeObjectURL(url)
-  message.success('HTML 导出成功')
+  message.success('HTML exported successfully')
 }
 
 // Reset view
@@ -282,7 +282,7 @@ function handleGlobalClick() {
           v-if="selectedNode"
           class="absolute top-3 left-3 text-xs px-3 py-1.5 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur text-gray-500 dark:text-gray-400"
         >
-          双击角色进入聚焦模式 · 双击空白退出
+          Double-click character to enter focus mode · Double-click blank area to exit
         </div>
       </div>
 
@@ -301,9 +301,9 @@ function handleGlobalClick() {
     <!-- Empty state -->
     <div v-else class="flex flex-col items-center justify-center py-20 bg-white dark:bg-[#1f1f23] rounded-xl border border-gray-200/80 dark:border-gray-700/50">
       <CompassOutline class="w-16 h-16 text-gray-300 dark:text-gray-600 mb-4" />
-      <p class="text-gray-500 dark:text-gray-400 mb-2">尚未生成关系图谱</p>
+      <p class="text-gray-500 dark:text-gray-400 mb-2">No relationship graph generated yet</p>
       <p class="text-sm text-gray-400 dark:text-gray-500">
-        {{ props.project?.architectureGenerated ? '点击上方「生成图谱」按钮开始' : '请先在「小说架构」中生成架构数据' }}
+        {{ props.project?.architectureGenerated ? 'Click the "Generate Graph" button above to start' : 'Please first generate architecture data in "Novel Architecture"' }}
       </p>
     </div>
 

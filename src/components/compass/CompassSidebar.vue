@@ -75,13 +75,13 @@ function getOtherNode(edge) {
               :bordered="false"
               round
             >
-              {{ node.status === 'active' ? '活跃' : node.status === 'deceased' ? '已故' : '离场' }}
+              {{ node.status === 'active' ? 'Active' : node.status === 'deceased' ? 'Deceased' : 'Off Stage' }}
             </n-tag>
             <n-tag v-if="node.faction" size="small" :bordered="false" round>
               {{ node.faction }}
             </n-tag>
             <span class="text-xs text-gray-400">
-              重要度 {{ node.importance }}/10
+              Importance {{ node.importance }}/10
             </span>
           </div>
 
@@ -99,8 +99,8 @@ function getOtherNode(edge) {
 
           <!-- Relations -->
           <n-collapse :default-expanded-names="['relations']">
-            <n-collapse-item title="关系网络" name="relations">
-              <div v-if="relatedEdges.length === 0" class="text-sm text-gray-400">暂无关系</div>
+            <n-collapse-item title="Relationship Network" name="relations">
+              <div v-if="relatedEdges.length === 0" class="text-sm text-gray-400">No relationships</div>
               <div v-else class="space-y-2">
                 <div
                   v-for="edge in relatedEdges"
@@ -113,7 +113,7 @@ function getOtherNode(edge) {
                       :style="{ backgroundColor: RELATION_COLORS[edge.relationType] }"
                     />
                     <span class="font-medium text-gray-700 dark:text-gray-200">
-                      {{ getOtherNode(edge)?.label || '未知' }}
+                      {{ getOtherNode(edge)?.label || 'Unknown' }}
                     </span>
                     <n-tag size="tiny" :bordered="false" round>
                       {{ RELATION_LABELS[edge.relationType] || edge.relationType }}
@@ -126,8 +126,8 @@ function getOtherNode(edge) {
               </div>
             </n-collapse-item>
 
-            <n-collapse-item title="关联章节" name="chapters">
-              <div v-if="relatedChapters.length === 0" class="text-sm text-gray-400">暂无关联章节</div>
+            <n-collapse-item title="Related Chapters" name="chapters">
+              <div v-if="relatedChapters.length === 0" class="text-sm text-gray-400">No related chapters</div>
               <div v-else class="flex flex-wrap gap-1.5">
                 <n-button
                   v-for="ch in relatedChapters"
@@ -136,7 +136,7 @@ function getOtherNode(edge) {
                   secondary
                   @click="emit('locate-chapter', ch)"
                 >
-                  第 {{ ch }} 章
+                  Ch {{ ch }}
                 </n-button>
               </div>
             </n-collapse-item>
@@ -148,7 +148,7 @@ function getOtherNode(edge) {
               <template #icon>
                 <n-icon><TrashOutline /></n-icon>
               </template>
-              删除此节点
+              Delete Node
             </n-button>
           </div>
         </div>

@@ -51,7 +51,7 @@ const genreText = computed(() => {
 // Load project on mount - 加载项目
 onMounted(() => {
   if (!project.value) {
-    message.error('项目不存在')
+    message.error('Project not found')
     router.push('/')
   }
 })
@@ -80,7 +80,7 @@ async function handleGenerateArchitecture() {
       architectureGenerated: true
     })
 
-    message.success('小说架构生成完成!')
+    message.success('Novel architecture generated successfully!')
   } catch (error) {
     console.error('Generation error:', error)
     message.error('生成失败: ' + error.message)
@@ -98,7 +98,7 @@ async function handleGenerateBlueprint() {
   }
 
   if (!project.value.architectureGenerated) {
-    message.warning('请先生成小说架构')
+    message.warning('Please generate novel architecture first')
     return
   }
 
@@ -119,7 +119,7 @@ async function handleGenerateBlueprint() {
       blueprintGenerated: true
     })
 
-    message.success('章节大纲生成完成!')
+    message.success('Chapter blueprint generated successfully!')
   } catch (error) {
     console.error('Generation error:', error)
     message.error('生成失败: ' + error.message)
@@ -150,7 +150,7 @@ function handleExport(format) {
   a.click()
   URL.revokeObjectURL(url)
   
-  message.success('导出成功')
+  message.success('Export successful')
 }
 
 // Regenerate confirmation - 重新生成确认

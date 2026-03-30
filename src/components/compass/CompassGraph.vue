@@ -28,7 +28,7 @@ function createChart() {
   const isDark = settings.isDark
   chart.value = echarts.init(containerRef.value, isDark ? 'dark' : null)
 
-  // 点击事件
+  // Click events
   chart.value.on('click', (params) => {
     if (params.dataType === 'node') {
       if (clickTimer) {
@@ -50,7 +50,7 @@ function createChart() {
     }
   })
 
-  // 背景点击退出聚焦
+  // Background click to exit focus mode
   chart.value.getZr().on('click', (e) => {
     if (!e.target && isInFocusMode) {
       isInFocusMode = false
@@ -75,13 +75,13 @@ function buildOption(snapshot) {
           if (!raw) return params.data.name
           let s = `<b>${raw.label}</b>`
           if (raw.bio) s += `<br/>${raw.bio}`
-          if (raw.faction) s += `<br/>阵营: ${raw.faction}`
+          if (raw.faction) s += `<br/>Faction: ${raw.faction}`
           return s
         }
         if (params.dataType === 'edge') {
           const raw = params.data._raw
           if (!raw) return ''
-          return `${raw.label || ''}<br/>类型: ${RELATION_LABELS[raw.relationType] || raw.relationType}<br/>强度: ${raw.strength || '-'}`
+          return `${raw.label || ''}<br/>Type: ${RELATION_LABELS[raw.relationType] || raw.relationType}<br/>Strength: ${raw.strength || '-'}`
         }
         return ''
       }

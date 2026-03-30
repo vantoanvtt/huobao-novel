@@ -14,13 +14,13 @@ const props = defineProps({
 const emit = defineEmits(['generate', 'regenerate'])
 const novelStore = useNovelStore()
 
-// View mode - 视图模式
+// View mode
 const viewMode = ref('list') // 'list' | 'raw'
 
-// Search query - 搜索查询
+// Search query
 const searchQuery = ref('')
 
-// Filtered chapters - 过滤后的章节
+// Filtered chapters
 const filteredChapters = computed(() => {
   if (!searchQuery.value) return props.chapters
   const query = searchQuery.value.toLowerCase()
@@ -30,14 +30,14 @@ const filteredChapters = computed(() => {
   )
 })
 
-// Get twist level stars - 获取颠覆等级星星
+// Get twist level stars
 function getTwistStars(level) {
   if (!level) return '☆☆☆☆☆'
   const starCount = (level.match(/★/g) || []).length
   return level
 }
 
-// Update raw blueprint - 更新原始大纲
+// Update raw blueprint
 function updateBlueprint(value) {
   novelStore.updateProject(props.project.id, { chapterBlueprint: value })
 }
@@ -45,7 +45,7 @@ function updateBlueprint(value) {
 
 <template>
   <div class="space-y-4">
-    <!-- Not ready state - 未就绪状态 -->
+    <!-- Not ready state -->
     <div 
       v-if="!architectureGenerated" 
       class="bg-white dark:bg-[#1f1f23] rounded-2xl p-12 border border-gray-200/80 dark:border-gray-700/50 text-center"
@@ -54,14 +54,14 @@ function updateBlueprint(value) {
         <WarningOutline class="w-12 h-12 text-white" />
       </div>
       <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-3">
-        请先生成小说架构
+        Generate Architecture First
       </h3>
       <p class="text-gray-500 dark:text-gray-400 max-w-md mx-auto leading-relaxed">
-        章节大纲的生成需要基于小说架构（核心种子、角色体系、世界观、情节架构）
+        Chapter blueprint requires architecture generation first
       </p>
     </div>
 
-    <!-- Generate button area - 生成按钮区域 -->
+    <!-- Generate button area -->
     <div 
       v-else-if="!project.chapterBlueprint" 
       class="bg-white dark:bg-[#1f1f23] rounded-2xl p-12 border border-gray-200/80 dark:border-gray-700/50 text-center"
@@ -70,10 +70,10 @@ function updateBlueprint(value) {
         <ListOutline class="w-12 h-12 text-white" />
       </div>
       <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-3">
-        生成章节大纲
+        Generate Chapter Blueprint
       </h3>
       <p class="text-gray-500 dark:text-gray-400 mb-8 max-w-md mx-auto leading-relaxed">
-        AI 将基于小说架构，生成 {{ project.numberOfChapters }} 章的详细大纲，包含悬念节奏曲线
+        AI will generate {{ project.numberOfChapters }} chapters with detailed outline and suspense curve
       </p>
       <n-button 
         type="primary" 
@@ -85,43 +85,43 @@ function updateBlueprint(value) {
         <template #icon v-if="!isGenerating">
           <n-icon><PlayOutline /></n-icon>
         </template>
-        {{ isGenerating ? '生成中...' : '开始生成大纲' }}
+        {{ isGenerating ? 'Generating...' : 'Generate Blueprint' }}
       </n-button>
     </div>
 
-    <!-- Content area - 内容区域 -->
+    <!-- Content area -->
     <template v-else>
-      <!-- Toolbar - 工具栏 -->
+      <!-- Toolbar -->
       <div class="flex items-center justify-between gap-4 flex-wrap bg-white dark:bg-[#1f1f23] rounded-xl p-4 border border-gray-200/80 dark:border-gray-700/50">
         <div class="flex items-center gap-3">
-          <!-- View mode toggle - 视图模式切换 -->
+          <!-- View mode toggle -->
           <n-radio-group v-model:value="viewMode" size="small">
             <n-radio-button value="list">
               <div class="flex items-center gap-1">
                 <GridOutline class="w-4 h-4" />
-                卡片视图
+                Card View
               </div>
             </n-radio-button>
             <n-radio-button value="raw">
               <div class="flex items-center gap-1">
                 <DocumentTextOutline class="w-4 h-4" />
-                原始文本
+                Raw Text
               </div>
             </n-radio-button>
           </n-radio-group>
 
-          <!-- Chapter count - 章节数量 -->
+          <!-- Chapter count -->
           <n-tag type="info" :bordered="false" round>
-            共 {{ chapters.length }} 章
+            Total {{ chapters.length }} chapters
           </n-tag>
         </div>
 
         <div class="flex items-center gap-2">
-          <!-- Search - 搜索 -->
+          <!-- Search -->
           <n-input
             v-if="viewMode === 'list'"
             v-model:value="searchQuery"
-            placeholder="搜索章节..."
+            placeholder="Search chapters..."
             clearable
             style="width: 220px"
           >
@@ -130,7 +130,7 @@ function updateBlueprint(value) {
             </template>
           </n-input>
 
-          <!-- Regenerate - 重新生成 -->
+          <!-- Regenerate -->
           <n-button 
             :disabled="isGenerating"
             @click="emit('regenerate')"
@@ -139,12 +139,12 @@ function updateBlueprint(value) {
             <template #icon>
               <n-icon><RefreshOutline /></n-icon>
             </template>
-            重新生成
+            Regenerate
           </n-button>
         </div>
       </div>
 
-      <!-- List view - 列表视图 -->
+      <!-- List view -->
       <div v-if="viewMode === 'list'" class="space-y-4">
         <div 
           v-for="chapter in filteredChapters" 
@@ -152,18 +152,18 @@ function updateBlueprint(value) {
           class="bg-white dark:bg-[#1f1f23] rounded-xl p-5 border border-gray-200/80 dark:border-gray-700/50 hover:border-indigo-300 dark:hover:border-indigo-600/50 hover:shadow-lg hover:shadow-indigo-500/5 transition-all duration-300"
         >
           <div class="flex items-start gap-4">
-            <!-- Chapter number - 章节编号 -->
+            <!-- Chapter number -->
             <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-indigo-500/20">
               <span class="text-white font-bold text-sm">{{ chapter.number }}</span>
             </div>
 
             <div class="flex-1 min-w-0">
-              <!-- Title - 标题 -->
+              <!-- Title -->
               <h4 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">
-                第{{ chapter.number }}章 - {{ chapter.title }}
+                Chapter {{ chapter.number }}: {{ chapter.title }}
               </h4>
 
-              <!-- Meta info - 元信息 -->
+              <!-- Meta info -->
               <div class="flex flex-wrap gap-2 mb-3">
                 <n-tag v-if="chapter.position" size="small" :bordered="false" round>
                   {{ chapter.position }}
@@ -176,33 +176,33 @@ function updateBlueprint(value) {
                 </n-tag>
               </div>
 
-              <!-- Summary - 简述 -->
+              <!-- Summary -->
               <p v-if="chapter.summary" class="text-gray-600 dark:text-gray-300 text-sm mb-3 leading-relaxed">
                 {{ chapter.summary }}
               </p>
 
-              <!-- Details - 详情 -->
+              <!-- Details -->
               <div class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
                 <span v-if="chapter.foreshadowing" class="flex items-center gap-1">
                   <GitNetworkOutline class="w-4 h-4" />
                   {{ chapter.foreshadowing }}
                 </span>
                 <span v-if="chapter.twistLevel" class="flex items-center gap-1">
-                  认知颠覆: {{ getTwistStars(chapter.twistLevel) }}
+                  Twist: {{ getTwistStars(chapter.twistLevel) }}
                 </span>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Empty search result - 搜索结果为空 -->
+        <!-- Empty search result -->
         <div v-if="filteredChapters.length === 0" class="text-center py-16 bg-white dark:bg-[#1f1f23] rounded-xl border border-gray-200/80 dark:border-gray-700/50">
           <SearchOutline class="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
-          <p class="text-gray-500 dark:text-gray-400">没有找到匹配的章节</p>
+          <p class="text-gray-500 dark:text-gray-400">No matching chapters found</p>
         </div>
       </div>
 
-      <!-- Raw view - 原始文本视图 -->
+      <!-- Raw view -->
       <div v-else>
         <n-input
           type="textarea"

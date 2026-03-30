@@ -19,14 +19,14 @@ const settings = useSettingsStore()
 const message = useMessage()
 const dialog = useDialog()
 
-// Current chapter being written - 当前正在写的章节
+// Current chapter being written
 const currentChapter = ref(1)
 const chapterContent = ref('')
 const generationStep = ref('')
 const graphGenerating = ref(false)
 const graphStep = ref('')
 
-// Parsed blueprint chapters - 解析后的大纲章节
+// Parsed blueprint chapters
 const blueprintChapters = computed(() => {
   if (!props.project?.chapterBlueprint) return []
   return parseChapterBlueprint(props.project.chapterBlueprint)
@@ -245,7 +245,7 @@ loadChapter(nextChapterToWrite.value)
 
 <template>
   <div class="space-y-4">
-    <!-- Not ready state - 未就绪状态 -->
+    <!-- Not ready state -->
     <div 
       v-if="!project?.blueprintGenerated" 
       class="bg-white dark:bg-[#1f1f23] rounded-2xl p-12 border border-gray-200/80 dark:border-gray-700/50 text-center"
@@ -253,20 +253,20 @@ loadChapter(nextChapterToWrite.value)
       <div class="w-24 h-24 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-xl shadow-amber-500/25">
         <WarningOutline class="w-12 h-12 text-white" />
       </div>
-      <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-3">请先生成章节大纲</h3>
+      <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-3">Generate Chapter Blueprint First</h3>
       <p class="text-gray-500 dark:text-gray-400 max-w-md mx-auto leading-relaxed">
-        章节正文的生成需要基于章节大纲
+        Chapter text generation requires chapter blueprint
       </p>
     </div>
 
     <!-- Main content - 主内容 -->
     <template v-else>
-      <!-- Progress indicator - 进度指示 -->
+      <!-- Progress indicator -->
       <div class="bg-white dark:bg-[#1f1f23] rounded-xl p-5 border border-gray-200/80 dark:border-gray-700/50">
         <div class="flex items-center justify-between mb-3">
-          <span class="text-sm font-medium text-gray-600 dark:text-gray-400">写作进度</span>
+          <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Writing Progress</span>
           <span class="text-sm font-bold text-gray-800 dark:text-white">
-            {{ writtenChaptersCount }} / {{ project.numberOfChapters }} 章
+            {{ writtenChaptersCount }} / {{ project.numberOfChapters }} chapters
           </span>
         </div>
         <n-progress 

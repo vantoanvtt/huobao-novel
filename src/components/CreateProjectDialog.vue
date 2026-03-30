@@ -15,7 +15,7 @@ const router = useRouter()
 const novelStore = useNovelStore()
 const message = useMessage()
 
-// Form data - 表单数据
+// Form data
 const formRef = ref(null)
 const form = reactive({
   title: '',
@@ -26,44 +26,44 @@ const form = reactive({
   userGuidance: ''
 })
 
-// Genre options - 类型选项
+// Genre options
 const genreOptions = [
-  { label: '玄幻', value: '玄幻' },
-  { label: '仙侠', value: '仙侠' },
-  { label: '都市', value: '都市' },
-  { label: '历史', value: '历史' },
-  { label: '科幻', value: '科幻' },
-  { label: '游戏', value: '游戏' },
-  { label: '悬疑', value: '悬疑' },
-  { label: '奇幻', value: '奇幻' },
-  { label: '武侠', value: '武侠' },
-  { label: '言情', value: '言情' },
-  { label: '军事', value: '军事' },
-  { label: '体育', value: '体育' },
-  { label: '灵异', value: '灵异' },
-  { label: '二次元', value: '二次元' },
-  { label: '其他', value: '其他' }
+  { label: 'Fantasy', value: '玄幻' },
+  { label: 'Xianxia', value: '仙侠' },
+  { label: 'Urban', value: '都市' },
+  { label: 'Historical', value: '历史' },
+  { label: 'Sci-Fi', value: '科幻' },
+  { label: 'Game', value: '游戏' },
+  { label: 'Mystery', value: '悬疑' },
+  { label: 'Supernatural', value: '奇幻' },
+  { label: 'Martial Arts', value: '武侠' },
+  { label: 'Romance', value: '言情' },
+  { label: 'Military', value: '军事' },
+  { label: 'Sports', value: '体育' },
+  { label: 'Horror', value: '灵异' },
+  { label: 'Anime', value: '二次元' },
+  { label: 'Other', value: '其他' }
 ]
 
-// Form rules - 表单规则
+// Form rules
 const rules = {
-  title: [{ required: true, message: '请输入项目名称', trigger: 'blur' }],
-  topic: [{ required: true, message: '请输入小说主题', trigger: 'blur' }],
+  title: [{ required: true, message: 'Please enter project name', trigger: 'blur' }],
+  topic: [{ required: true, message: 'Please enter novel topic', trigger: 'blur' }],
   genre: [
     {
       required: true,
       trigger: 'change',
       validator: (_rule, value) => {
         if (Array.isArray(value) && value.length > 0) return true
-        return new Error('请选择小说类型')
+        return new Error('Please select novel genre')
       }
     }
   ],
-  numberOfChapters: [{ required: true, message: '请输入章节数量', trigger: 'blur', type: 'number' }],
-  wordNumber: [{ required: true, message: '请输入每章字数', trigger: 'blur', type: 'number' }]
+  numberOfChapters: [{ required: true, message: 'Please enter number of chapters', trigger: 'blur', type: 'number' }],
+  wordNumber: [{ required: true, message: 'Please enter words per chapter', trigger: 'blur', type: 'number' }]
 }
 
-// Reset form when dialog opens - 打开对话框时重置表单
+// Reset form when dialog opens
 watch(() => props.modelValue, (val) => {
   if (val) {
     form.title = ''
@@ -75,7 +75,7 @@ watch(() => props.modelValue, (val) => {
   }
 })
 
-// Create project - 创建项目
+// Create project
 async function createProject() {
   if (!formRef.value) return
   
@@ -91,7 +91,7 @@ async function createProject() {
       userGuidance: form.userGuidance
     })
     
-    message.success('项目创建成功')
+    message.success('Project created successfully')
     emit('update:modelValue', false)
     router.push(`/project/${project.id}`)
   } catch (error) {
@@ -106,7 +106,7 @@ async function createProject() {
     @update:show="emit('update:modelValue', $event)"
     :mask-closable="false"
     preset="card"
-    title="创建新项目"
+    title="Create New Project"
     style="width: 620px"
     :bordered="false"
     class="!rounded-2xl"
@@ -118,30 +118,30 @@ async function createProject() {
       label-placement="top"
       class="space-y-1"
     >
-      <!-- Project title - 项目名称 -->
-      <n-form-item label="项目名称" path="title">
+      <!-- Project title -->
+      <n-form-item label="Project Name" path="title">
         <n-input 
           v-model:value="form.title" 
-          placeholder="例如：星辰大海"
+          placeholder="e.g., Star and Sea"
           :maxlength="50"
           show-count
         />
       </n-form-item>
 
-      <!-- Novel topic - 小说主题 -->
-      <n-form-item label="小说主题 / 核心创意" path="topic">
+      <!-- Novel topic -->
+      <n-form-item label="Novel Topic / Core Concept" path="topic">
         <n-input 
           v-model:value="form.topic" 
           type="textarea"
           :rows="3"
-          placeholder="描述你的小说核心创意，例如：一个普通少年意外获得神秘传承，在修仙世界中逐步成长..."
+          placeholder="Describe your novel core concept..."
           :maxlength="500"
           show-count
         />
       </n-form-item>
 
-      <!-- Genre selection - 类型选择 -->
-      <n-form-item label="小说类型" path="genre">
+      <!-- Genre selection -->
+      <n-form-item label="Novel Genre" path="genre">
         <n-select 
           v-model:value="form.genre" 
           :options="genreOptions"
@@ -150,9 +150,9 @@ async function createProject() {
         />
       </n-form-item>
 
-      <!-- Chapter count and word count - 章节数和字数 -->
+      <!-- Chapter count and word count -->
       <div class="grid grid-cols-2 gap-4">
-        <n-form-item label="预计章节数" path="numberOfChapters">
+        <n-form-item label="Number of Chapters" path="numberOfChapters">
           <n-input-number 
             v-model:value="form.numberOfChapters" 
             :min="10" 
@@ -162,7 +162,7 @@ async function createProject() {
           />
         </n-form-item>
 
-        <n-form-item label="每章字数" path="wordNumber">
+        <n-form-item label="Words per Chapter" path="wordNumber">
           <n-input-number 
             v-model:value="form.wordNumber" 
             :min="1000" 
@@ -173,13 +173,13 @@ async function createProject() {
         </n-form-item>
       </div>
 
-      <!-- User guidance - 用户指导 -->
-      <n-form-item label="创作指导 (可选)">
+      <!-- User guidance -->
+      <n-form-item label="Creation Guidance (Optional)">
         <n-input 
           v-model:value="form.userGuidance" 
           type="textarea"
           :rows="3"
-          placeholder="可以在这里添加额外的创作要求，如特定角色设定、情节走向、写作风格等..."
+          placeholder="Add additional creation requirements here, such as character settings, plot direction, writing style, etc."
           :maxlength="1000"
           show-count
         />
@@ -188,12 +188,12 @@ async function createProject() {
 
     <template #footer>
       <n-space justify="end">
-        <n-button @click="emit('update:modelValue', false)">取消</n-button>
+        <n-button @click="emit('update:modelValue', false)">Cancel</n-button>
         <n-button type="primary" @click="createProject">
           <template #icon>
             <n-icon><CheckmarkOutline /></n-icon>
           </template>
-          创建项目
+          Create Project
         </n-button>
       </n-space>
     </template>

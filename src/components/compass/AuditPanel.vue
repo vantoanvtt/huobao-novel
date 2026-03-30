@@ -11,9 +11,9 @@ const props = defineProps({
 const emit = defineEmits(['locate', 'close'])
 
 const severityConfig = {
-  error: { type: 'error', icon: AlertCircleOutline, label: '严重' },
-  warning: { type: 'warning', icon: WarningOutline, label: '警告' },
-  info: { type: 'info', icon: InformationCircleOutline, label: '建议' }
+  error: { type: 'error', icon: AlertCircleOutline, label: 'Error' },
+  warning: { type: 'warning', icon: WarningOutline, label: 'Warning' },
+  info: { type: 'info', icon: InformationCircleOutline, label: 'Suggestion' }
 }
 
 const inconsistencies = computed(() => props.audit?.inconsistencies || [])
@@ -51,7 +51,7 @@ function handleLocate(item) {
       <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200/80 dark:border-gray-700/50">
         <div class="flex items-center gap-2">
           <WarningOutline class="w-5 h-5 text-amber-500" />
-          <span class="font-semibold text-gray-800 dark:text-white">逻辑审计</span>
+          <span class="font-semibold text-gray-800 dark:text-white">Logic Audit</span>
         </div>
         <div class="flex items-center gap-1.5">
           <n-tag v-if="errorCount" type="error" size="small" :bordered="false" round>{{ errorCount }}</n-tag>
@@ -63,7 +63,7 @@ function handleLocate(item) {
       <!-- Content -->
       <div class="flex-1 overflow-auto">
         <div v-if="inconsistencies.length === 0" class="p-8">
-          <n-empty description="未发现逻辑问题" />
+          <n-empty description="No logic issues found" />
         </div>
 
         <div v-else class="p-3">
@@ -96,13 +96,13 @@ function handleLocate(item) {
                     </div>
                     <div class="flex items-center gap-2 text-xs text-gray-400">
                       <span v-if="item.chapters?.length">
-                        章节: {{ item.chapters.join(', ') }}
+                        Chapters: {{ item.chapters.join(', ') }}
                       </span>
                       <n-button quaternary size="tiny" @click.stop="handleLocate(item)">
                         <template #icon>
                           <n-icon size="12"><LocationOutline /></n-icon>
                         </template>
-                        定位
+                        Locate
                       </n-button>
                     </div>
                   </div>
@@ -115,7 +115,7 @@ function handleLocate(item) {
 
       <!-- Footer -->
       <div v-if="audit?.lastAuditAt" class="px-4 py-2 border-t border-gray-200/80 dark:border-gray-700/50 text-xs text-gray-400">
-        上次审计: {{ new Date(audit.lastAuditAt).toLocaleString('zh-CN') }}
+        Last audit: {{ new Date(audit.lastAuditAt).toLocaleString('en-US') }}
       </div>
     </div>
   </transition>

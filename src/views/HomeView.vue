@@ -16,21 +16,21 @@ const dialog = useDialog()
 
 const showCreateDialog = ref(false)
 
-// Delete project with confirmation - 确认后删除项目
+// Delete project with confirmation
 async function handleDelete(project) {
   dialog.warning({
-    title: '删除确认',
-    content: `确定要删除项目 "${project.title}" 吗？此操作不可恢复。`,
-    positiveText: '删除',
-    negativeText: '取消',
+    title: 'Delete Confirmation',
+    content: `Are you sure you want to delete project "${project.title}"? This action cannot be undone.`,
+    positiveText: 'Delete',
+    negativeText: 'Cancel',
     onPositiveClick: () => {
       novelStore.deleteProject(project.id)
-      message.success('项目已删除')
+      message.success('Project deleted')
     }
   })
 }
 
-// Open project - 打开项目
+// Open project
 function openProject(project) {
   router.push(`/project/${project.id}`)
 }
@@ -38,20 +38,20 @@ function openProject(project) {
 
 <template>
   <div class="max-w-6xl mx-auto">
-    <!-- Hero Section - 英雄区域 -->
+    <!-- Hero Section -->
     <div class="text-center py-16 mb-8">
       <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 text-sm font-medium mb-6">
         <RocketOutline class="w-4 h-4" />
-        基于雪花写作法的 AI 创作工具
+        AI Creation Tools Based on Snowflake Writing Method
       </div>
       <h1 class="text-5xl font-bold mb-6 bg-gradient-to-r from-gray-900 via-indigo-800 to-purple-800 dark:from-white dark:via-indigo-200 dark:to-purple-200 bg-clip-text text-transparent">
-        AI 小说生成器
+        AI Novel Generator
       </h1>
       <p class="text-gray-600 dark:text-gray-400 text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
-        智能生成小说架构、角色体系、世界观和章节大纲，让创作更高效
+        Generate novel architecture, character systems, world building, and chapter outlines intelligently
       </p>
       
-      <!-- Quick start button - 快速开始按钮 -->
+      <!-- Quick start button -->
       <n-button 
         type="primary" 
         size="large"
@@ -61,15 +61,15 @@ function openProject(project) {
         <template #icon>
           <n-icon><AddOutline /></n-icon>
         </template>
-        创建新项目
+        Create New Project
       </n-button>
     </div>
 
-    <!-- Projects Grid - 项目网格 -->
+    <!-- Projects Grid -->
     <div v-if="novelStore.hasProjects" class="mb-12">
       <div class="flex items-center justify-between mb-6">
         <h2 class="text-xl font-bold text-gray-800 dark:text-white">
-          我的项目
+          My Projects
           <span class="text-sm font-normal text-gray-500 dark:text-gray-400 ml-2">
             ({{ novelStore.projectList.length }})
           </span>
@@ -87,7 +87,7 @@ function openProject(project) {
       </div>
     </div>
 
-    <!-- Empty State - 空状态 -->
+    <!-- Empty State -->
     <div 
       v-else 
       class="text-center py-20 bg-white dark:bg-[#1f1f23] rounded-2xl border border-gray-200/80 dark:border-gray-700/50"
@@ -95,8 +95,8 @@ function openProject(project) {
       <div class="w-24 h-24 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center">
         <DocumentTextOutline class="w-12 h-12 text-gray-400 dark:text-gray-500" />
       </div>
-      <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">还没有项目</h3>
-      <p class="text-gray-500 dark:text-gray-400 mb-6">点击上方按钮创建你的第一个小说项目</p>
+      <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">No Projects Yet</h3>
+      <p class="text-gray-500 dark:text-gray-400 mb-6">Click the button above to create your first novel project</p>
     </div>
 
     <!-- Features Section - 功能介绍 -->

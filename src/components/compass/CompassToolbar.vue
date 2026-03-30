@@ -11,8 +11,8 @@ const props = defineProps({
 const emit = defineEmits(['generate', 'update-snapshots', 'export-png', 'export-html', 'reset-view'])
 
 const exportOptions = [
-  { label: '导出为 PNG', key: 'png' },
-  { label: '导出为交互式 HTML', key: 'html' }
+  { label: 'Export as PNG', key: 'png' },
+  { label: 'Export as Interactive HTML', key: 'html' }
 ]
 
 function handleExport(key) {
@@ -35,10 +35,10 @@ function handleExport(key) {
             <template #icon>
               <n-icon><RefreshOutline /></n-icon>
             </template>
-            {{ graphGenerated ? '重新生成图谱' : '生成图谱' }}
+            {{ graphGenerated ? 'Regenerate Graph' : 'Generate Graph' }}
           </n-button>
         </template>
-        从小说架构数据中提取实体关系
+        Extract entity relationships from novel architecture
       </n-tooltip>
 
       <n-button
@@ -51,7 +51,7 @@ function handleExport(key) {
         <template #icon>
           <n-icon><PlayOutline /></n-icon>
         </template>
-        更新章节快照
+        Update Chapter Snapshots
       </n-button>
     </div>
 
@@ -65,7 +65,7 @@ function handleExport(key) {
         <template #icon>
           <n-icon><ScanOutline /></n-icon>
         </template>
-        重置视图
+        Reset View
       </n-button>
 
       <n-dropdown
@@ -77,7 +77,7 @@ function handleExport(key) {
           <template #icon>
             <n-icon><DownloadOutline /></n-icon>
           </template>
-          导出
+          Export
         </n-button>
       </n-dropdown>
     </div>
